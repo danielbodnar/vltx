@@ -1,7 +1,7 @@
 {
   "mode": "stock",
   "base": "http://127.0.0.1:1337",
-  "date": "2026-10-04T18:45:00Z",
+  "date": "2026-10-04T23:39:41Z",
   "probes": [
     {
       "id": "ping",
@@ -75,28 +75,28 @@
     },
     {
       "id": "publish",
-      "request": "npm publish @local/vlt-lab-hello@0.1.1791139499",
+      "request": "npm publish @local/vlt-lab-hello@0.1.1791157180",
       "auth": true,
       "status": "exit 0",
-      "detail": "+ @local/vlt-lab-hello@0.1.1791139499 "
+      "detail": "+ @local/vlt-lab-hello@0.1.1791157180 "
     },
     {
       "id": "local-packument",
       "request": "GET /@local%2fvlt-lab-hello",
       "auth": false,
       "status": 200,
-      "detail": "versions: 0.1.1791139499; tarball http://127.0.0.1:1337/@local/vlt-lab-hello/-/vlt-lab-hello-0.1.1791139499.tgz"
+      "detail": "versions: 0.1.1791157180; tarball http://127.0.0.1:1337/@local/vlt-lab-hello/-/vlt-lab-hello-0.1.1791157180.tgz"
     },
     {
       "id": "local-packument-auth",
       "request": "GET /@local%2fvlt-lab-hello",
       "auth": true,
       "status": 200,
-      "detail": "versions: 0.1.1791139499"
+      "detail": "versions: 0.1.1791157180"
     },
     {
       "id": "local-tarball",
-      "request": "GET /@local/vlt-lab-hello/-/vlt-lab-hello-0.1.1791139499.tgz",
+      "request": "GET /@local/vlt-lab-hello/-/vlt-lab-hello-0.1.1791157180.tgz",
       "auth": true,
       "status": 404,
       "detail": "Unknown upstream: @local"

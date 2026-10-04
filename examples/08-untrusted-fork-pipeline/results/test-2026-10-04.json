@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-04T18:40:26Z",
+  "date": "2026-10-04T23:38:29Z",
   "passed": 119,
   "failed": 0,
   "timings": [
@@ -7,121 +7,121 @@
       "impl": "sh",
       "case": "hostile",
       "exit": 0,
-      "ms": 10711
+      "ms": 10468
     },
     {
       "impl": "sh",
       "case": "permissive",
       "exit": 0,
-      "ms": 9802
+      "ms": 9618
     },
     {
       "impl": "sh",
       "case": "hostile-cfg",
       "exit": 0,
-      "ms": 9325
+      "ms": 9756
     },
     {
       "impl": "sh",
       "case": "npm",
       "exit": 0,
-      "ms": 10696
+      "ms": 10107
     },
     {
       "impl": "sh",
       "case": "scripts",
       "exit": 0,
-      "ms": 11480
+      "ms": 10548
     },
     {
       "impl": "sh",
       "case": "gate-block",
       "exit": 3,
-      "ms": 4358
+      "ms": 4586
     },
     {
       "impl": "sh",
       "case": "native",
       "exit": 0,
-      "ms": 5962
+      "ms": 5982
     },
     {
       "impl": "nu",
       "case": "hostile",
       "exit": 0,
-      "ms": 8918
+      "ms": 10456
     },
     {
       "impl": "nu",
       "case": "hostile-cfg",
       "exit": 0,
-      "ms": 8259
+      "ms": 8261
     },
     {
       "impl": "nu",
       "case": "npm",
       "exit": 0,
-      "ms": 8945
+      "ms": 9196
     },
     {
       "impl": "nu",
       "case": "scripts",
       "exit": 0,
-      "ms": 9040
+      "ms": 9012
     },
     {
       "impl": "nu",
       "case": "gate-block",
       "exit": 3,
-      "ms": 4291
+      "ms": 4019
     },
     {
       "impl": "nu",
       "case": "native",
       "exit": 0,
-      "ms": 5713
+      "ms": 5664
     },
     {
       "impl": "ts",
       "case": "hostile",
       "exit": 0,
-      "ms": 7913
+      "ms": 8657
     },
     {
       "impl": "ts",
       "case": "hostile-cfg",
       "exit": 0,
-      "ms": 8541
+      "ms": 8991
     },
     {
       "impl": "ts",
       "case": "npm",
       "exit": 0,
-      "ms": 9438
+      "ms": 8919
     },
     {
       "impl": "ts",
       "case": "scripts",
       "exit": 0,
-      "ms": 9578
+      "ms": 8972
     },
     {
       "impl": "ts",
       "case": "gate-block",
       "exit": 3,
-      "ms": 4398
+      "ms": 4024
     },
     {
       "impl": "ts",
       "case": "native",
       "exit": 0,
-      "ms": 5432
+      "ms": 5805
     },
     {
       "impl": "sh",
       "case": "real",
       "exit": 0,
-      "ms": 30975
+      "ms": 27208
     }
   ],
   "checks": [
@@ -203,12 +203,12 @@
     {
       "id": "sh hostile: canary-attempts.log written (postinstall ran)",
       "pass": true,
-      "observed": "/home/claude/vlt-lab/.tmp/fork-install.ZNlXQA/repo/vendor/evil-pkg/canary-attempts.log"
+      "observed": "/home/claude/vlt-lab/.tmp/fork-install.n0Xbhw/repo/vendor/evil-pkg/canary-attempts.log"
     },
     {
       "id": "sh hostile: postinstall ran inside the build phase window, not during fetch",
       "pass": true,
-      "observed": "script at 1791139047875; build 1791139047516..1791139048251; fetch 1791139039841..1791139040603"
+      "observed": "script at 1791156934878; build 1791156934515..1791156935243; fetch 1791156926998..1791156927718"
     },
     {
       "id": "sh hostile: script environment carries NONO_CAP_FILE (it ran under nono)",
@@ -343,7 +343,7 @@
     {
       "id": "sh native: postinstall ran inside the native-build window (hostile .npmrc ignore-scripts=false had no effect on fetch)",
       "pass": true,
-      "observed": "script at 1791139099942; build 1791139099465..1791139100802"
+      "observed": "script at 1791156985472; build 1791156985058..1791156986428"
     },
     {
       "id": "sh native: reads, HOME write and network denied, no token",
@@ -378,12 +378,12 @@
     {
       "id": "nu hostile: canary-attempts.log written (postinstall ran)",
       "pass": true,
-      "observed": "/home/claude/vlt-lab/.tmp/fork-install.BAmKfH/repo/vendor/evil-pkg/canary-attempts.log"
+      "observed": "/home/claude/vlt-lab/.tmp/fork-install.GRHKb5/repo/vendor/evil-pkg/canary-attempts.log"
     },
     {
       "id": "nu hostile: postinstall ran inside the build phase window, not during fetch",
       "pass": true,
-      "observed": "script at 1791139109443; build 1791139109033..1791139109893; fetch 1791139103036..1791139103481"
+      "observed": "script at 1791156996548; build 1791156996216..1791156996884; fetch 1791156988712..1791156990761"
     },
     {
       "id": "nu hostile: script environment carries NONO_CAP_FILE (it ran under nono)",
@@ -503,7 +503,7 @@
     {
       "id": "nu native: postinstall ran inside the native-build window (hostile .npmrc ignore-scripts=false had no effect on fetch)",
       "pass": true,
-      "observed": "script at 1791139145472; build 1791139145042..1791139146246"
+      "observed": "script at 1791157032570; build 1791157032175..1791157033615"
     },
     {
       "id": "nu native: reads, HOME write and network denied, no token",
@@ -538,12 +538,12 @@
     {
       "id": "ts hostile: canary-attempts.log written (postinstall ran)",
       "pass": true,
-      "observed": "/home/claude/vlt-lab/.tmp/fork-install.Kfhjmm/repo/vendor/evil-pkg/canary-attempts.log"
+      "observed": "/home/claude/vlt-lab/.tmp/fork-install.hPLyJF/repo/vendor/evil-pkg/canary-attempts.log"
     },
     {
       "id": "ts hostile: postinstall ran inside the build phase window, not during fetch",
       "pass": true,
-      "observed": "script at 1791139154754; build 1791139154359..1791139155091; fetch 1791139148851..1791139149362"
+      "observed": "script at 1791157042131; build 1791157041724..1791157042461; fetch 1791157035787..1791157036275"
     },
     {
       "id": "ts hostile: script environment carries NONO_CAP_FILE (it ran under nono)",
@@ -663,7 +663,7 @@
     {
       "id": "ts native: postinstall ran inside the native-build window (hostile .npmrc ignore-scripts=false had no effect on fetch)",
       "pass": true,
-      "observed": "script at 1791139191719; build 1791139191269..1791139192620"
+      "observed": "script at 1791157078363; build 1791157077960..1791157079472"
     },
     {
       "id": "ts native: reads, HOME write and network denied, no token",
@@ -723,17 +723,17 @@
     {
       "id": "layer contrast: what that fetch-phase script could do (info)",
       "pass": null,
-      "observed": "read-home-secret id_canary: EACCES;read-home-secret token: EACCES;write-home .bashrc.canary: EACCES;http-post-proxy exfil.invalid.example: 403;http-post-proxy registry.yarnpkg.com: 403;write-tmp vlt-lab-canary-10999.txt: ok;"
+      "observed": "read-home-secret id_canary: EACCES;read-home-secret token: EACCES;write-home .bashrc.canary: EACCES;http-post-proxy exfil.invalid.example: 403;http-post-proxy registry.yarnpkg.com: 403;write-tmp vlt-lab-canary-23419.txt: ok;"
     },
     {
       "id": "real repo https://github.com/sindresorhus/is: cloned and reported",
       "pass": true,
-      "observed": "exit 0 in 30975ms"
+      "observed": "exit 0 in 27208ms"
     },
     {
       "id": "real repo https://github.com/sindresorhus/is: summary",
       "pass": null,
-      "observed": "commit e9c026c611c1; exit 0; acquire=0/695ms detect=0/149ms fetch=0/14153ms gate=0/6785ms build=0/3144ms report=0/414ms; added 477; built 1: unrs-resolver; pending 1; denied ; gate warnings gate-cve,gate-vuln-high,gate-squat"
+      "observed": "commit e9c026c611c1; exit 0; acquire=0/678ms detect=0/150ms fetch=0/11223ms gate=0/6664ms build=0/2688ms report=0/417ms; added 477; built 1: unrs-resolver; pending 1; denied ; gate warnings gate-cve,gate-vuln-high,gate-squat"
     },
     {
       "id": "no fork-install scratch dirs left in <repo>/.tmp",

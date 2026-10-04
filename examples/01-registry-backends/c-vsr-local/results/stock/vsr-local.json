@@ -1,7 +1,7 @@
 {
   "profile": "vsr-local",
   "registry": "http://127.0.0.1:1337/npm/",
-  "date": "2026-10-04T18:44:54Z",
+  "date": "2026-10-04T23:39:35Z",
   "entrypoint": "sh",
   "fixture": {
     "esbuild": "0.25.0",
@@ -18,7 +18,7 @@
       "version": "10.9.4",
       "cold": {
         "exit": 1,
-        "ms": 1060
+        "ms": 1090
       },
       "warm": null,
       "lockfile": "package-lock.json",
@@ -41,7 +41,7 @@
       "version": "10.28.0",
       "cold": {
         "exit": 1,
-        "ms": 3396
+        "ms": 2904
       },
       "warm": null,
       "lockfile": "pnpm-lock.yaml",
@@ -64,7 +64,7 @@
       "version": "1.22.22",
       "cold": {
         "exit": 1,
-        "ms": 1042
+        "ms": 872
       },
       "warm": null,
       "lockfile": "yarn.lock",
@@ -87,7 +87,7 @@
       "version": "1.4.2",
       "cold": {
         "exit": 1,
-        "ms": 351
+        "ms": 339
       },
       "warm": null,
       "lockfile": "bun.lock",
@@ -103,14 +103,14 @@
         "left-pad": ""
       },
       "installed_ok": false,
-      "error": "error: GET http://127.0.0.1:1337/npm/left-pad/-/left-pad-1.3.0.tgz - 404"
+      "error": "error: GET http://127.0.0.1:1337/npm/is-number/-/is-number-7.0.0.tgz - 404"
     },
     {
       "client": "vlt",
       "version": "1.3.6",
       "cold": {
         "exit": 1,
-        "ms": 755
+        "ms": 688
       },
       "warm": null,
       "lockfile": "vlt-lock.json",
@@ -126,7 +126,7 @@
         "left-pad": ""
       },
       "installed_ok": false,
-      "error": "Resolve Error: 404 Not Found — Not found when fetching the tarball for esbuild@0.25.0. The resolved version may have been unpublished, or the registry may be misconfigured or unreachable."
+      "error": "Resolve Error: 404 Not Found — Not found when fetching the tarball for is-number@7.0.0. The resolved version may have been unpublished, or the registry may be misconfigured or unreachable."
     }
   ]
 }

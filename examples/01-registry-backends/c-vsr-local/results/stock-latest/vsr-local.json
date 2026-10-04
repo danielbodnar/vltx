@@ -1,7 +1,7 @@
 {
   "profile": "vsr-local",
   "registry": "http://127.0.0.1:1337/npm/",
-  "date": "2026-10-04T18:44:57Z",
+  "date": "2026-10-04T23:39:38Z",
   "entrypoint": "sh",
   "fixture": {
     "is-number": "7.0.0",
@@ -17,7 +17,7 @@
       "version": "10.9.4",
       "cold": {
         "exit": 1,
-        "ms": 415
+        "ms": 342
       },
       "warm": null,
       "lockfile": "package-lock.json",
@@ -39,7 +39,7 @@
       "version": "10.28.0",
       "cold": {
         "exit": 1,
-        "ms": 514
+        "ms": 550
       },
       "warm": null,
       "lockfile": "pnpm-lock.yaml",
@@ -54,14 +54,14 @@
         "left-pad": ""
       },
       "installed_ok": false,
-      "error": " ERR_PNPM_FETCH_404  GET http://127.0.0.1:1337/npm/is-number/-/is-number-7.0.0.tgz: Not Found - 404"
+      "error": " ERR_PNPM_FETCH_404  GET http://127.0.0.1:1337/npm/left-pad/-/left-pad-1.3.0.tgz: Not Found - 404"
     },
     {
       "client": "yarn",
       "version": "1.22.22",
       "cold": {
         "exit": 1,
-        "ms": 346
+        "ms": 314
       },
       "warm": null,
       "lockfile": "yarn.lock",
@@ -76,7 +76,7 @@
         "left-pad": ""
       },
       "installed_ok": false,
-      "error": "error Error: http://127.0.0.1:1337/npm/is-number/-/is-number-7.0.0.tgz: Request failed \"404 Not Found\""
+      "error": "error Error: http://127.0.0.1:1337/npm/left-pad/-/left-pad-1.3.0.tgz: Request failed \"404 Not Found\""
     },
     {
       "client": "bun",
@@ -98,14 +98,14 @@
         "left-pad": ""
       },
       "installed_ok": false,
-      "error": "error: GET http://127.0.0.1:1337/npm/left-pad/-/left-pad-1.3.0.tgz - 404"
+      "error": "error: GET http://127.0.0.1:1337/npm/is-number/-/is-number-7.0.0.tgz - 404"
     },
     {
       "client": "vlt",
       "version": "1.3.6",
       "cold": {
         "exit": 1,
-        "ms": 320
+        "ms": 329
       },
       "warm": null,
       "lockfile": "vlt-lock.json",

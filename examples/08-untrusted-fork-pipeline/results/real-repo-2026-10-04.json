@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "tool": "fork-install",
   "implementation": "sh",
-  "generatedAt": "2026-10-04T18:40:24Z",
+  "generatedAt": "2026-10-04T23:38:27Z",
   "input": {
     "source": "https://github.com/sindresorhus/is",
     "kind": "git",
@@ -19,7 +19,7 @@
     "permissive": false
   },
   "scratch": {
-    "dir": "/home/claude/vlt-lab/.tmp/fork-install.uBRLgF",
+    "dir": "/home/claude/vlt-lab/.tmp/fork-install.bCwjPq",
     "kept": false
   },
   "acquire": {
@@ -65,30 +65,30 @@
     "acquire": {
       "ran": true,
       "exit": 0,
-      "startedAtMs": 1791139195870,
-      "durationMs": 695,
+      "startedAtMs": 1791157082652,
+      "durationMs": 678,
       "skipReason": null,
       "sandbox": null
     },
     "detect": {
       "ran": true,
       "exit": 0,
-      "startedAtMs": 1791139196592,
-      "durationMs": 149,
+      "startedAtMs": 1791157083358,
+      "durationMs": 150,
       "skipReason": null,
       "sandbox": null
     },
     "fetch": {
       "ran": true,
       "exit": 0,
-      "startedAtMs": 1791139196754,
-      "durationMs": 14153,
+      "startedAtMs": 1791157083519,
+      "durationMs": 11223,
       "skipReason": null,
       "sandbox": {
         "phase": "fetch",
         "profile": "examples/07-nono-sandboxing/profiles/vlt-fetch.jsonc",
         "network": "proxy",
-        "auditSession": "a087cf33fac5e9d8",
+        "auditSession": "a0ba3b703c2f59f3",
         "networkAllowed": 64,
         "networkDenied": []
       }
@@ -96,14 +96,14 @@
     "gate": {
       "ran": true,
       "exit": 0,
-      "startedAtMs": 1791139211733,
-      "durationMs": 6785,
+      "startedAtMs": 1791157095472,
+      "durationMs": 6664,
       "skipReason": null,
       "sandbox": {
         "phase": "query",
         "profile": "examples/07-nono-sandboxing/profiles/vlt-query.jsonc",
         "network": "proxy",
-        "auditSession": "711e94700a7d6261",
+        "auditSession": "ccef21164fd878f7",
         "networkAllowed": 1,
         "networkDenied": []
       }
@@ -111,14 +111,14 @@
     "build": {
       "ran": true,
       "exit": 0,
-      "startedAtMs": 1791139219295,
-      "durationMs": 3144,
+      "startedAtMs": 1791157103007,
+      "durationMs": 2688,
       "skipReason": null,
       "sandbox": {
         "phase": "build",
         "profile": "examples/07-nono-sandboxing/profiles/vlt-build.jsonc",
         "network": "block",
-        "auditSession": "9dfabb9c982c46fe",
+        "auditSession": "241daff61b5fcdbd",
         "networkAllowed": 0,
         "networkDenied": []
       }
@@ -126,14 +126,14 @@
     "report": {
       "ran": true,
       "exit": 0,
-      "startedAtMs": 1791139223269,
-      "durationMs": 414,
+      "startedAtMs": 1791157106445,
+      "durationMs": 417,
       "skipReason": null,
       "sandbox": {
         "phase": "query",
         "profile": "examples/07-nono-sandboxing/profiles/vlt-query.jsonc",
         "network": "proxy",
-        "auditSession": "842ef59dc8c389aa",
+        "auditSession": "065d5a2255e782d7",
         "networkAllowed": 0,
         "networkDenied": []
       }
@@ -143,9 +143,9 @@
     "schemaVersion": 1,
     "tool": "vlt-install-any",
     "implementation": "sh",
-    "generatedAt": "2026-10-04T18:40:23Z",
+    "generatedAt": "2026-10-04T23:38:26Z",
     "vltVersion": "1.3.6",
-    "source": "/home/claude/vlt-lab/.tmp/fork-install.uBRLgF/repo",
+    "source": "/home/claude/vlt-lab/.tmp/fork-install.bCwjPq/repo",
     "profile": {
       "name": "npmjs",
       "registry": "https://registry.npmjs.org/"
@@ -162,7 +162,7 @@
       "registryLines": [],
       "authLines": 0
     },
-    "vltRoot": "/home/claude/vlt-lab/.tmp/fork-install.uBRLgF/repo",
+    "vltRoot": "/home/claude/vlt-lab/.tmp/fork-install.bCwjPq/repo",
     "warnings": [
       {
         "code": "gate-cve",
@@ -180,23 +180,23 @@
     "phases": {
       "detect": {
         "exit": 0,
-        "durationMs": 127
+        "durationMs": 129
       },
       "fetch": {
         "exit": 0,
-        "durationMs": 13978
+        "durationMs": 11059
       },
       "gate": {
         "exit": 0,
-        "durationMs": 6552
+        "durationMs": 6331
       },
       "build": {
         "exit": 0,
-        "durationMs": 2834
+        "durationMs": 2535
       },
       "report": {
         "exit": 0,
-        "durationMs": 172
+        "durationMs": 168
       }
     },
     "fetch": {
@@ -216,7 +216,7 @@
       "error": null
     },
     "gate": {
-      "file": "/home/claude/vlt-lab/.tmp/fork-install.uBRLgF/state/gate.rules.json",
+      "file": "/home/claude/vlt-lab/.tmp/fork-install.bCwjPq/state/gate.rules.json",
       "blocked": false,
       "rules": [
         {

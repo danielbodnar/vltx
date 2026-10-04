@@ -22,12 +22,20 @@ A safety review found 12 defects (curl option injection from a hostile `vlt.json
 - 07 fetch phase now runs `vlt install --allow-scripts=:not(*)` and grants vlt's own directory (07 test green).
 - Renderers add `YARN_IGNORE_SCRIPTS=true` (conformance 70/70; 01-a now asserts no client runs scripts, green).
 
+## Done since the first handoff
+
+- Cloudflare registry gate Worker (`examples/01-registry-backends/d-cf-registry-gate`), tested locally, not deployed.
+- Root `justfile` (`just check` runs unit tests, conformance, dash -n, both specs and a strict `tsc`), `AGENTS.md`, `.mcp.json` (vltx MCP from source), repo skills (`dss-query`, `vltx`).
+- `vltx.nu` typed flags for `--unsafe-build`, `--keep-modified`, `--allow-outside-repo`, `--keep-env`, `--package-manager-field`, `--no-token-check`.
+- Strict typecheck with `@types/node@22.20.5` and `typescript@7.0.2` (vetted with vlt `:malware`, `:squat`, `:vuln`, `:scripts`, `:obfuscated`, `:network`, `:shell`; all empty). Bun type packages remain excluded.
+- `c-vsr-local/stop.sh` group kill fixed for dash.
+- Full run of all 14 suites, all green: `docs/results.md`.
+
 ## Still open
 
-- vlt.io hosted run with a real token: `op run --env-file=.env.op -- vltx doctor` then `vltx -y` in a scratch repo.
-- `vltx.nu` has no typed flags yet for `--unsafe-build`, `--keep-modified`, `--allow-outside-repo`, `--keep-env` (they pass through).
-- No TypeScript typecheck in CI: `bun-types`/`@types/bun` were excluded on Socket scores; decide whether to add `@types/node` for `tsc --noEmit`.
-- Cloudflare registry gate Worker (lab example 01-d) not built.
-- Upstream issues to raise with vlt: vlt sends `VLT_TOKEN` only to the registry named by `registry`/`VLT_REGISTRY` (docs say otherwise); scoped `main` registry cannot use an env token; vsr rc.18 defects; ancestor `vlt.json` walk-up; `allow-scripts:"*"` in a project vlt.json; `vlt ping` exits 0 on failure.
+- vlt.io hosted run with a real token: `op run --env-file=.env.op -- vltx doctor`, then `vltx -y` in a scratch repo.
+- Deploy the gate (commands in its README) and check the Cache API on workers.dev; a private gate needs `tokenEnv` on the `gate` profile.
+- Publish `@danielbodnar/vltx` and `@danielbodnar/create-vltx`.
+- Upstream issues to raise with vlt: vlt sends `VLT_TOKEN` only to the registry named by `registry`/`VLT_REGISTRY` (docs say otherwise); the scoped `main` registry cannot use an env token; vsr rc.18 defects; ancestor `vlt.json` walk-up; `allow-scripts:"*"` in a project vlt.json; `vlt ping` exits 0 on failure.
 
 Earlier findings and the lab's status are in `README.md` and each example's README.

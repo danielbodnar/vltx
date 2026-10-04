@@ -1,10 +1,10 @@
 {
   "profile": "vsr-local",
   "registry": "http://127.0.0.1:1337/npm/",
-  "date": "2026-10-04T18:45:05Z",
+  "date": "2026-10-04T23:39:45Z",
   "entrypoint": "sh",
   "fixture": {
-    "@local/vlt-lab-hello": "0.1.1791139499",
+    "@local/vlt-lab-hello": "0.1.1791157180",
     "is-number": "7.0.0",
     "left-pad": "1.3.0"
   },
@@ -18,7 +18,7 @@
       "version": "10.9.4",
       "cold": {
         "exit": 1,
-        "ms": 2630
+        "ms": 2204
       },
       "warm": null,
       "lockfile": "package-lock.json",
@@ -41,7 +41,7 @@
       "version": "10.28.0",
       "cold": {
         "exit": 1,
-        "ms": 580
+        "ms": 596
       },
       "warm": null,
       "lockfile": "pnpm-lock.yaml",
@@ -64,7 +64,7 @@
       "version": "1.22.22",
       "cold": {
         "exit": 1,
-        "ms": 398
+        "ms": 341
       },
       "warm": null,
       "lockfile": "yarn.lock",
@@ -80,14 +80,14 @@
         "left-pad": ""
       },
       "installed_ok": false,
-      "error": "error Error: http://127.0.0.1:1337/npm/is-number/-/is-number-7.0.0.tgz: Request failed \"404 Not Found\""
+      "error": "error Error: http://127.0.0.1:1337/npm/left-pad/-/left-pad-1.3.0.tgz: Request failed \"404 Not Found\""
     },
     {
       "client": "bun",
       "version": "1.4.2",
       "cold": {
         "exit": 1,
-        "ms": 67
+        "ms": 60
       },
       "warm": null,
       "lockfile": "bun.lock",
@@ -103,14 +103,14 @@
         "left-pad": ""
       },
       "installed_ok": false,
-      "error": "error: GET http://127.0.0.1:1337/@local/vlt-lab-hello/-/vlt-lab-hello-0.1.1791139499.tgz - 404"
+      "error": "error: GET http://127.0.0.1:1337/npm/left-pad/-/left-pad-1.3.0.tgz - 404"
     },
     {
       "client": "vlt",
       "version": "1.3.6",
       "cold": {
         "exit": 1,
-        "ms": 291
+        "ms": 288
       },
       "warm": null,
       "lockfile": "vlt-lock.json",

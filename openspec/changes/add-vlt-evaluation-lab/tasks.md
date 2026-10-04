@@ -39,5 +39,5 @@
 
 ## 7. Verification
 
-- [ ] 7.1 Unit, conformance, and live smoke runs recorded in `docs/results.md`
-- [ ] 7.2 `openspec validate` passes
+- [x] 7.1 Unit, conformance, and live smoke runs recorded in `docs/results.md`
+- [x] 7.2 `openspec validate` passes
