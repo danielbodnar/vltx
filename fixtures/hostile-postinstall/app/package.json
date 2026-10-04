@@ -1,0 +1,10 @@
+{
+  "name": "hostile-postinstall-app",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Consumer project for the hostile postinstall fixture",
+  "dependencies": {
+    "evil-pkg": "file:../evil-pkg",
+    "left-pad": "1.3.0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "description": "Default fleet-scan queries. Each selector is evaluated per project; security selectors call api.socket.dev, :outdated reads registry metadata.",
+  "queries": [
+    { "name": "malware", "selector": ":malware" },
+    { "name": "cves", "selector": ":cve" },
+    { "name": "scripts", "selector": ":scripts" },
+    { "name": "unbuilt", "selector": ":scripts:not(:built)" },
+    { "name": "outdated-direct", "selector": ":root > :outdated(major)" },
+    { "name": "deprecated", "selector": ":deprecated" }
+  ]
+}
