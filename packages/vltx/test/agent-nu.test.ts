@@ -181,6 +181,14 @@ describe.skipIf?.(!hasNu)("vltx.nu", () => {
     expect(run("vltx validate --gate gate.json --staged")).toEqual(["validate", "--gate", "gate.json", "--staged"]);
     expect(run("vltx skills add vltx -g --force")).toEqual(["skills", "add", "vltx", "--force", "-g"]);
     expect(run("vltx nono run -- echo hi")).toEqual(["nono", "run", "--", "echo", "hi"]);
+    // flags added by the safety review
+    expect(run("vltx init -y --unsafe-build --package-manager-field remove --no-token-check")).toEqual([
+      "init", "-y", "--unsafe-build", "--package-manager-field", "remove", "--no-token-check",
+    ]);
+    expect(run("vltx remove --keep-modified -g")).toEqual(["remove", "--keep-modified", "-g"]);
+    expect(run("vltx hooks --init git --allow-outside-repo")).toEqual(["hooks", "--init", "git", "--allow-outside-repo"]);
+    expect(run("vltx sandbox build --keep-env")).toEqual(["sandbox", "build", "--keep-env"]);
+    expect(run("vltx pm use bun --unsafe-build")).toEqual(["pm", "use", "bun", "--unsafe-build"]);
     // not a terminal: no wizard, the CLI decides
     expect(run("vltx")).toEqual([]);
   }, T);

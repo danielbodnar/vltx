@@ -6,7 +6,7 @@ default:
     @just --list
 
 # Fast gates: renderer unit tests, cross-language conformance, shell syntax, specs
-check: test-profile conformance lint specs
+check: test-profile conformance lint specs typecheck
 
 # Registry-profile reference renderer (bun test; `just test-profile vitest` for the alternative)
 test-profile runner="bun":
@@ -25,6 +25,10 @@ lint:
 specs:
     openspec validate add-vlt-evaluation-lab
     openspec validate add-vltx-cli
+
+# Strict TypeScript check of the vltx sources (@types/node 22, no Bun types)
+typecheck:
+    cd packages/vltx && node_modules/.bin/tsc -p tsconfig.json
 
 # vltx CLI: tests, bundle, pack
 test-vltx:

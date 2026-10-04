@@ -5,22 +5,51 @@
   "type": "module",
   "license": "MIT",
   "author": "Daniel Bodnar",
-  "repository": { "type": "git", "url": "git+https://github.com/danielbodnar/vlt-lab.git", "directory": "packages/vltx" },
-  "keywords": ["vlt", "package-manager", "registry", "migration", "supply-chain", "nono", "sandbox"],
-  "bin": { "vltx": "dist/vltx.js" },
-  "files": ["dist", "assets", "vltx.nu", "README.md"],
-  "engines": { "node": ">=22.22" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielbodnar/vlt-lab.git",
+    "directory": "packages/vltx"
+  },
+  "keywords": [
+    "vlt",
+    "package-manager",
+    "registry",
+    "migration",
+    "supply-chain",
+    "nono",
+    "sandbox"
+  ],
+  "bin": {
+    "vltx": "dist/vltx.js"
+  },
+  "files": [
+    "dist",
+    "assets",
+    "vltx.nu",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.22"
+  },
   "scripts": {
     "dev": "bun src/cli.ts",
     "build": "bun build src/cli.ts --target=node --format=esm --outfile=dist/vltx.js && chmod +x dist/vltx.js",
     "assets": "sh scripts/sync-assets.sh",
     "test": "bun test",
     "test:vitest": "vitest run",
-    "prepack": "bun run assets && bun run build"
+    "prepack": "bun run assets && bun run build",
+    "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "2.3.0",
     "zod": "4.6.5"
   },
-  "publishConfig": { "access": "public", "provenance": true }
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "typescript": "7.0.2"
+  }
 }

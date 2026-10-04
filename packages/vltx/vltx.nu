@@ -64,6 +64,7 @@ def "nu-complete vltx skills" [] { $SKILLS }
 def "nu-complete vltx gate files" [] { ls | where type == file and name ends-with ".json" | get name }
 def "nu-complete vltx render targets" [] { $RENDER_TARGETS }
 def "nu-complete vltx hook managers" [] { $HOOK_MANAGERS }
+def "nu-complete vltx pm field" [] { [keep remove dev-engines] }
 def "nu-complete vltx scan formats" [] { $SCAN_FORMATS }
 def "nu-complete vltx mcp runners" [] { $MCP_RUNNERS }
 def "nu-complete vltx auth" [] { [status setup login token] }
@@ -296,9 +297,12 @@ export def --wrapped "vltx init" [
   --yes (-y)                                        # accept defaults
   --global (-g)                                     # user-level setup
   --dry-run                                         # print the plan only
+  --unsafe-build                                    # build without nono (secrets stripped, loud warning)
+  --package-manager-field: string@"nu-complete vltx pm field" # keep, remove or dev-engines
+  --no-token-check                                  # skip the VLT_TOKEN requirement
   ...rest: string
 ] {
-  ^vltx init ...(global-args {init: $init, account: $account, pm: $pm, yes: $yes, global: $global, dry_run: $dry_run}) ...$rest
+  ^vltx init ...(global-args {init: $init, account: $account, pm: $pm, yes: $yes, global: $global, dry_run: $dry_run}) ...(opt "--unsafe-build" $unsafe_build) ...(opt "--package-manager-field" $package_manager_field) ...(opt "--no-token-check" $no_token_check) ...$rest
 }
 
 # Alias of `vltx init`; with package arguments, `vlt install`.
@@ -307,7 +311,12 @@ export def --wrapped "vltx install" [...rest: string] { ^vltx install ...$rest }
 export def --wrapped "vltx setup" [...rest: string] { ^vltx setup ...$rest }
 
 # Undo vltx changes using the backups in .vltx.json.
-export def --wrapped "vltx remove" [--dry-run, ...rest: string] { ^vltx remove ...(opt "--dry-run" $dry_run) ...$rest }
+export def --wrapped "vltx remove" [
+  --dry-run          # print what would be restored
+  --keep-modified    # leave files changed since vltx wrote them
+  --global (-g)      # undo the user-level setup
+  ...rest: string
+] { ^vltx remove ...(opt "--dry-run" $dry_run) ...(opt "--keep-modified" $keep_modified) ...(opt "-g" $global) ...$rest }
 # Alias of `vltx remove`; with package arguments, `vlt uninstall`.
 export def --wrapped "vltx uninstall" [...rest: string] { ^vltx uninstall ...$rest }
 
@@ -330,16 +339,20 @@ export def --wrapped "vltx config show" [--raw, ...rest: string] {
 export def --wrapped "vltx registry" [sub?: string@"nu-complete vltx registry", ...rest: string] { ^vltx registry ...([$sub] | compact) ...$rest }
 
 # Detect, switch or pin the package manager.
-export def --wrapped "vltx pm" [sub?: string@"nu-complete vltx pm sub", pm?: string@"nu-complete vltx pm", ...rest: string] {
-  ^vltx pm ...([$sub $pm] | compact) ...$rest
+export def --wrapped "vltx pm" [sub?: string@"nu-complete vltx pm sub", pm?: string@"nu-complete vltx pm", --unsafe-build, ...rest: string] {
+  ^vltx pm ...([$sub $pm] | compact) ...(opt "--unsafe-build" $unsafe_build) ...$rest
 }
 
 # Git hooks that run vltx validate.
-export def --wrapped "vltx hooks" [--init: string@"nu-complete vltx hook managers", ...rest: string] { ^vltx hooks ...(opt "--init" $init) ...$rest }
+export def --wrapped "vltx hooks" [
+  --init: string@"nu-complete vltx hook managers"  # lefthook, hk or git
+  --allow-outside-repo                             # allow a hooks dir outside the repo (global core.hooksPath)
+  ...rest: string
+] { ^vltx hooks ...(opt "--init" $init) ...(opt "--allow-outside-repo" $allow_outside_repo) ...$rest }
 
 # Create a new project already on vlt and the private registry.
-export def --wrapped "vltx new" [dir?: path, --account: string, ...rest: string] {
-  ^vltx new ...([$dir] | compact | each { into string }) ...(opt "--account" $account) ...$rest
+export def --wrapped "vltx new" [dir?: path, --account: string, --unsafe-build, ...rest: string] {
+  ^vltx new ...([$dir] | compact | each { into string }) ...(opt "--account" $account) ...(opt "--unsafe-build" $unsafe_build) ...$rest
 }
 # Alias of `vltx new`.
 export def --wrapped "vltx create" [...rest: string] { ^vltx create ...$rest }
@@ -387,9 +400,10 @@ export def --wrapped "vltx sandbox" [
   phase?: string@"nu-complete vltx phases"  # fetch, query, build, npm-fetch, native-build (or -- cmd...)
   --permissive                              # looser build profile
   --unsafe                                  # no sandbox
+  --keep-env                                # keep tokens and secrets in the run phase environment
   ...rest: string
 ] {
-  ^vltx sandbox ...([$phase] | compact) ...(opt "--permissive" $permissive) ...(opt "--unsafe" $unsafe) ...$rest
+  ^vltx sandbox ...([$phase] | compact) ...(opt "--permissive" $permissive) ...(opt "--unsafe" $unsafe) ...(opt "--keep-env" $keep_env) ...$rest
 }
 
 # nono: direct wrapper, plus vltx profile helpers.
