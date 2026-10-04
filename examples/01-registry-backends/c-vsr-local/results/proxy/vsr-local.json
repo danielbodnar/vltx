@@ -1,0 +1,154 @@
+{
+  "profile": "vsr-local",
+  "registry": "http://127.0.0.1:1337/npm/",
+  "date": "2026-10-04T18:45:22Z",
+  "entrypoint": "sh",
+  "fixture": {
+    "esbuild": "0.25.0",
+    "is-number": "7.0.0",
+    "left-pad": "1.3.0"
+  },
+  "notes": [
+    "yarn classic project .npmrc gets always-auth=true (yarn 1.22 sends _authToken only with it)",
+    "vlt receives VSR_TOKEN as VLT_TOKEN"
+  ],
+  "clients": [
+    {
+      "client": "npm",
+      "version": "10.9.4",
+      "cold": {
+        "exit": 1,
+        "ms": 1068
+      },
+      "warm": null,
+      "lockfile": "package-lock.json",
+      "lockfile_written": false,
+      "scripts_ran": false,
+      "script_events": [],
+      "esbuild_bin": "missing",
+      "tarball_hosts": [],
+      "host_source": "lockfile resolved URLs",
+      "installed": {
+        "esbuild": "",
+        "is-number": "",
+        "left-pad": ""
+      },
+      "installed_ok": false,
+      "error": "npm error notarget No matching version found for esbuild@0.25.0."
+    },
+    {
+      "client": "pnpm",
+      "version": "10.28.0",
+      "cold": {
+        "exit": 0,
+        "ms": 3338
+      },
+      "warm": {
+        "exit": 0,
+        "ms": 522
+      },
+      "lockfile": "pnpm-lock.yaml",
+      "lockfile_written": true,
+      "scripts_ran": false,
+      "script_events": [],
+      "esbuild_bin": "js-shim",
+      "tarball_hosts": [
+        "127.0.0.1:1337"
+      ],
+      "host_source": "lockfile has integrity only; default registry from node_modules/.modules.yaml",
+      "installed": {
+        "esbuild": "0.25.0",
+        "is-number": "7.0.0",
+        "left-pad": "1.3.0"
+      },
+      "installed_ok": true,
+      "error": ""
+    },
+    {
+      "client": "yarn",
+      "version": "1.22.22",
+      "cold": {
+        "exit": 0,
+        "ms": 3867
+      },
+      "warm": {
+        "exit": 0,
+        "ms": 514
+      },
+      "lockfile": "yarn.lock",
+      "lockfile_written": true,
+      "scripts_ran": true,
+      "script_events": [
+        "esbuild postinstall"
+      ],
+      "esbuild_bin": "js-shim",
+      "tarball_hosts": [
+        "127.0.0.1:1337"
+      ],
+      "host_source": "lockfile resolved URLs",
+      "installed": {
+        "esbuild": "0.25.0",
+        "is-number": "7.0.0",
+        "left-pad": "1.3.0"
+      },
+      "installed_ok": true,
+      "error": ""
+    },
+    {
+      "client": "bun",
+      "version": "1.4.2",
+      "cold": {
+        "exit": 0,
+        "ms": 444
+      },
+      "warm": {
+        "exit": 0,
+        "ms": 10
+      },
+      "lockfile": "bun.lock",
+      "lockfile_written": true,
+      "scripts_ran": false,
+      "script_events": [],
+      "esbuild_bin": "js-shim",
+      "tarball_hosts": [
+        "127.0.0.1:1337"
+      ],
+      "host_source": "bun.lock URLs, empty URL means bun's default registry.npmjs.org",
+      "installed": {
+        "esbuild": "0.25.0",
+        "is-number": "7.0.0",
+        "left-pad": "1.3.0"
+      },
+      "installed_ok": true,
+      "error": ""
+    },
+    {
+      "client": "vlt",
+      "version": "1.3.6",
+      "cold": {
+        "exit": 0,
+        "ms": 966
+      },
+      "warm": {
+        "exit": 0,
+        "ms": 407
+      },
+      "lockfile": "vlt-lock.json",
+      "lockfile_written": true,
+      "scripts_ran": false,
+      "script_events": [],
+      "esbuild_bin": "js-shim",
+      "tarball_hosts": [
+        "127.0.0.1:1337"
+      ],
+      "host_source": "vlt-lock.json registry aliases",
+      "installed": {
+        "esbuild": "0.25.0",
+        "is-number": "7.0.0",
+        "left-pad": "1.3.0"
+      },
+      "installed_ok": true,
+      "error": ""
+    }
+  ]
+}

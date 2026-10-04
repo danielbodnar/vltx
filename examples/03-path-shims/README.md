@@ -121,7 +121,7 @@ Other observations, with how they were measured:
 
 ## Shared helpers worth moving to lib/
 
-- `lib/ts/profile.ts` does not re-export `envPairs`; `dispatch.ts` imports it from `packages/registry-profile/src/index.ts`.
+- `dispatch.ts` imports `envPairs` from `packages/registry-profile/src/index.ts`; `lib/ts/profile.ts` now re-exports it as well.
 - The seen-shim-dirs lookup (`VLT_LAB_SHIM_SEEN` plus a filtered `PATH` around `vl_real_bin`) is needed by anything that dispatches through shims, and would sit naturally next to `vl_real_bin`.
 
 ## References

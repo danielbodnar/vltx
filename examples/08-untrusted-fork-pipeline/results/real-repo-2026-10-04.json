@@ -1,0 +1,364 @@
+{
+  "schemaVersion": 1,
+  "tool": "fork-install",
+  "implementation": "sh",
+  "generatedAt": "2026-10-04T18:40:24Z",
+  "input": {
+    "source": "https://github.com/sindresorhus/is",
+    "kind": "git",
+    "ref": null,
+    "commit": "e9c026c611c1160eaad50da00be4e676b626018f",
+    "slug": "sindresorhus-is"
+  },
+  "mode": "vlt",
+  "options": {
+    "profile": "npmjs",
+    "gate": null,
+    "build": ":scripts:not(:built):not(:malware)",
+    "noBuild": false,
+    "permissive": false
+  },
+  "scratch": {
+    "dir": "/home/claude/vlt-lab/.tmp/fork-install.uBRLgF",
+    "kept": false
+  },
+  "acquire": {
+    "exit": 0,
+    "error": null,
+    "gitConfig": [
+      "core.hooksPath=/dev/null",
+      "core.fsmonitor=false",
+      "protocol.file.allow=never",
+      "protocol.ext.allow=never",
+      "transfer.fsckObjects=true",
+      "submodule.recurse=false"
+    ],
+    "removed": {
+      "gitDir": true,
+      "nodeModules": false,
+      "externalSymlinks": []
+    },
+    "neutralized": [
+      {
+        "file": ".npmrc",
+        "action": "moved",
+        "sha256": "f3fc23758ab91be5f94a8c5eaff433d1ccd6a206cf1d381d332eb63716009337"
+      },
+      {
+        "file": "vlt.json",
+        "action": "created",
+        "sha256": null
+      }
+    ],
+    "vltJson": {
+      "present": false,
+      "sha256": null,
+      "parseError": null,
+      "keptKeys": [],
+      "droppedTopLevel": [],
+      "droppedConfigKeys": [],
+      "dangerousKeys": [],
+      "registryHosts": []
+    }
+  },
+  "phases": {
+    "acquire": {
+      "ran": true,
+      "exit": 0,
+      "startedAtMs": 1791139195870,
+      "durationMs": 695,
+      "skipReason": null,
+      "sandbox": null
+    },
+    "detect": {
+      "ran": true,
+      "exit": 0,
+      "startedAtMs": 1791139196592,
+      "durationMs": 149,
+      "skipReason": null,
+      "sandbox": null
+    },
+    "fetch": {
+      "ran": true,
+      "exit": 0,
+      "startedAtMs": 1791139196754,
+      "durationMs": 14153,
+      "skipReason": null,
+      "sandbox": {
+        "phase": "fetch",
+        "profile": "examples/07-nono-sandboxing/profiles/vlt-fetch.jsonc",
+        "network": "proxy",
+        "auditSession": "a087cf33fac5e9d8",
+        "networkAllowed": 64,
+        "networkDenied": []
+      }
+    },
+    "gate": {
+      "ran": true,
+      "exit": 0,
+      "startedAtMs": 1791139211733,
+      "durationMs": 6785,
+      "skipReason": null,
+      "sandbox": {
+        "phase": "query",
+        "profile": "examples/07-nono-sandboxing/profiles/vlt-query.jsonc",
+        "network": "proxy",
+        "auditSession": "711e94700a7d6261",
+        "networkAllowed": 1,
+        "networkDenied": []
+      }
+    },
+    "build": {
+      "ran": true,
+      "exit": 0,
+      "startedAtMs": 1791139219295,
+      "durationMs": 3144,
+      "skipReason": null,
+      "sandbox": {
+        "phase": "build",
+        "profile": "examples/07-nono-sandboxing/profiles/vlt-build.jsonc",
+        "network": "block",
+        "auditSession": "9dfabb9c982c46fe",
+        "networkAllowed": 0,
+        "networkDenied": []
+      }
+    },
+    "report": {
+      "ran": true,
+      "exit": 0,
+      "startedAtMs": 1791139223269,
+      "durationMs": 414,
+      "skipReason": null,
+      "sandbox": {
+        "phase": "query",
+        "profile": "examples/07-nono-sandboxing/profiles/vlt-query.jsonc",
+        "network": "proxy",
+        "auditSession": "842ef59dc8c389aa",
+        "networkAllowed": 0,
+        "networkDenied": []
+      }
+    }
+  },
+  "install": {
+    "schemaVersion": 1,
+    "tool": "vlt-install-any",
+    "implementation": "sh",
+    "generatedAt": "2026-10-04T18:40:23Z",
+    "vltVersion": "1.3.6",
+    "source": "/home/claude/vlt-lab/.tmp/fork-install.uBRLgF/repo",
+    "profile": {
+      "name": "npmjs",
+      "registry": "https://registry.npmjs.org/"
+    },
+    "detected": "unknown",
+    "packageManager": null,
+    "lockfiles": [],
+    "foreignLockfilesUnchanged": true,
+    "vltLockfile": true,
+    "keepForeignLockfile": true,
+    "workspaces": [],
+    "npmrc": {
+      "present": false,
+      "registryLines": [],
+      "authLines": 0
+    },
+    "vltRoot": "/home/claude/vlt-lab/.tmp/fork-install.uBRLgF/repo",
+    "warnings": [
+      {
+        "code": "gate-cve",
+        "message": "gate rule cve (:cve) expected 0, got 1"
+      },
+      {
+        "code": "gate-vuln-high",
+        "message": "gate rule vuln-high (:vuln(\"<=high\")) expected 0, got 1"
+      },
+      {
+        "code": "gate-squat",
+        "message": "gate rule squat (:squat) expected 0, got 3"
+      }
+    ],
+    "phases": {
+      "detect": {
+        "exit": 0,
+        "durationMs": 127
+      },
+      "fetch": {
+        "exit": 0,
+        "durationMs": 13978
+      },
+      "gate": {
+        "exit": 0,
+        "durationMs": 6552
+      },
+      "build": {
+        "exit": 0,
+        "durationMs": 2834
+      },
+      "report": {
+        "exit": 0,
+        "durationMs": 172
+      }
+    },
+    "fetch": {
+      "mode": "install",
+      "command": [
+        "vlt",
+        "install",
+        "--allow-scripts=:not(*)"
+      ],
+      "added": 477,
+      "removed": 0,
+      "changed": 0,
+      "buildQueue": [
+        "~npm~unrs-resolver@1.12.2"
+      ],
+      "pinnedRoot": false,
+      "error": null
+    },
+    "gate": {
+      "file": "/home/claude/vlt-lab/.tmp/fork-install.uBRLgF/state/gate.rules.json",
+      "blocked": false,
+      "rules": [
+        {
+          "name": "malware",
+          "selector": ":malware",
+          "expect": "0",
+          "severity": "block",
+          "status": "pass",
+          "count": 0,
+          "matches": [],
+          "expectExit": 0,
+          "error": null
+        },
+        {
+          "name": "cve",
+          "selector": ":cve",
+          "expect": "0",
+          "severity": "warn",
+          "status": "fail",
+          "count": 1,
+          "matches": [
+            {
+              "id": "~npm~braces@3.0.3",
+              "name": "braces",
+              "version": "3.0.3"
+            }
+          ],
+          "expectExit": 1,
+          "error": null
+        },
+        {
+          "name": "vuln-high",
+          "selector": ":vuln(\"<=high\")",
+          "expect": "0",
+          "severity": "warn",
+          "status": "fail",
+          "count": 1,
+          "matches": [
+            {
+              "id": "~npm~braces@3.0.3",
+              "name": "braces",
+              "version": "3.0.3"
+            }
+          ],
+          "expectExit": 1,
+          "error": null
+        },
+        {
+          "name": "obfuscated",
+          "selector": ":obfuscated",
+          "expect": "0",
+          "severity": "warn",
+          "status": "pass",
+          "count": 0,
+          "matches": [],
+          "expectExit": 0,
+          "error": null
+        },
+        {
+          "name": "squat",
+          "selector": ":squat",
+          "expect": "0",
+          "severity": "warn",
+          "status": "fail",
+          "count": 3,
+          "matches": [
+            {
+              "id": "~npm~@asamuzakjp+nwsapi@2.3.9",
+              "name": "@asamuzakjp/nwsapi",
+              "version": "2.3.9"
+            },
+            {
+              "id": "~npm~hashery@1.5.1",
+              "name": "hashery",
+              "version": "1.5.1"
+            },
+            {
+              "id": "~npm~open-editor@6.0.0",
+              "name": "open-editor",
+              "version": "6.0.0"
+            }
+          ],
+          "expectExit": 1,
+          "error": null
+        },
+        {
+          "name": "unbuilt-scripts",
+          "selector": ":scripts:not(:built)",
+          "expect": "0",
+          "severity": "info",
+          "status": "fail",
+          "count": 2,
+          "matches": [
+            {
+              "id": "file~_d",
+              "name": "@sindresorhus/is",
+              "version": "8.1.0"
+            },
+            {
+              "id": "~npm~unrs-resolver@1.12.2",
+              "name": "unrs-resolver",
+              "version": "1.12.2"
+            }
+          ],
+          "expectExit": 1,
+          "error": null
+        },
+        {
+          "name": "abandoned",
+          "selector": ":abandoned",
+          "expect": "0",
+          "severity": "info",
+          "status": "pass",
+          "count": 0,
+          "matches": [],
+          "expectExit": 0,
+          "error": null
+        }
+      ],
+      "error": null
+    },
+    "build": {
+      "skipped": false,
+      "skipReason": null,
+      "target": ":scripts:not(:built):not(:malware)",
+      "built": [
+        {
+          "id": "~npm~unrs-resolver@1.12.2",
+          "name": "unrs-resolver",
+          "version": "1.12.2"
+        }
+      ],
+      "failed": [],
+      "pending": [
+        {
+          "id": "file~_d",
+          "name": "@sindresorhus/is",
+          "version": "8.1.0"
+        }
+      ]
+    },
+    "exit": 0
+  },
+  "exit": 0
+}
