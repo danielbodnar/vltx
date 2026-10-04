@@ -1,0 +1,7 @@
+node_modules/
+.tmp/
+.wrangler/
+local-store/
+*.log
+.dev.vars
+reports/
