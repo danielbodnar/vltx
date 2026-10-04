@@ -21,11 +21,11 @@ PIDFILE=$DIR/vsr.pid
 PID=$(cat "$PIDFILE")
 case $PID in ''|*[!0-9]*) vl_die "bad pidfile $PIDFILE" ;; esac
 if kill -0 "$PID" 2>/dev/null; then
-  kill -TERM -- "-$PID" 2>/dev/null || kill -TERM "$PID" 2>/dev/null || true
+  kill -TERM "-$PID" 2>/dev/null || kill -TERM "$PID" 2>/dev/null || true
   i=0
   # wait for the whole group (wrangler plus workerd), not just the leader
-  while [ "$i" -lt 20 ] && kill -0 -- "-$PID" 2>/dev/null; do sleep 0.5; i=$((i + 1)); done
-  if kill -0 -- "-$PID" 2>/dev/null; then kill -KILL -- "-$PID" 2>/dev/null || true; fi
+  while [ "$i" -lt 20 ] && kill -0 "-$PID" 2>/dev/null; do sleep 0.5; i=$((i + 1)); done
+  if kill -0 "-$PID" 2>/dev/null; then kill -KILL "-$PID" 2>/dev/null || true; fi
   vl_log "stopped vsr process group $PID"
 else
   vl_log "pid $PID was not running"

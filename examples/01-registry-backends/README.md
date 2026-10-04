@@ -2,7 +2,7 @@
 
 Four places a JavaScript install can fetch from, each reachable through one profile in `config/registry.profiles.json` and measured with the same five-client smoke (npm, pnpm, yarn classic, bun, vlt) from [a-npmjs-baseline](a-npmjs-baseline/README.md). Each subdirectory has its own README with commands, results and limits.
 
-| | [npmjs](a-npmjs-baseline/README.md) | [vlt-hosted](b-vlt-hosted/README.md) | [gate](d-cf-registry-gate/) | [vsr-local](c-vsr-local/README.md) |
+| | [npmjs](a-npmjs-baseline/README.md) | [vlt-hosted](b-vlt-hosted/README.md) | [gate](d-cf-registry-gate/README.md) | [vsr-local](c-vsr-local/README.md) |
 |---|---|---|---|---|
 | What it is | the public npm registry, direct | vlt.io account registries: `npm` mirror plus private `main` | Hono Worker on Cloudflare proxying an npm-compatible upstream | vlt serverless registry (Workers, D1, R2) under `wrangler dev --local` |
 | Profile | `npmjs` | `vlt-hosted` (needs `VLT_ACCOUNT`) | `gate-local` (127.0.0.1:8787), `gate` (workers.dev) | `vsr-local` (127.0.0.1:1337) |
@@ -11,7 +11,7 @@ Four places a JavaScript install can fetch from, each reachable through one prof
 | Hosting | npm, Inc. | vlt.io | your Cloudflare account (or local `wrangler dev`) | local here; Cloudflare Workers when deployed |
 | Cost | free for public packages | per vlt.io plan; not covered by the docs snapshot | Cloudflare Workers pricing when deployed | free locally; Workers, D1 and R2 pricing when deployed |
 | Client compatibility | all five clients install the fixture, cold and warm | per docs: pnpm 12 cannot use the mirror, pnpm 11.5.3+ ignores `${VAR}` in a project `.npmrc`, bun expands only `$VAR` in `bunfig.toml`, yarn needs always-auth | see its README | stock: no client installs anything; with `PROXY=true`: all five install latest versions, older pinned versions fail on first contact, published `@local` packages fail everywhere |
-| Status in this lab | measured 2026-10-04, `test.sh` green | scripts and offline checks green; real account **not run (no token)** | built in `d-cf-registry-gate` (owned by another workstream) | measured 2026-10-04, seven defects documented (three in packaging, four in the registry), `test.sh` green |
+| Status in this lab | measured 2026-10-04, `test.sh` green | scripts and offline checks green; real account **not run (no token)** | measured locally 2026-10-04 (`wrangler dev --local`, live OSV), `test.sh` green: 39 tests, all five clients install, flatmap-stream@0.1.1 tarball 451; deploy **not run** | measured 2026-10-04, seven defects documented (three in packaging, four in the registry), `test.sh` green |
 
 Shared findings across backends, observed with the npmjs and vsr-local profiles:
 

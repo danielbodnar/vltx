@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "vltx": {
+      "type": "stdio",
+      "command": "bun",
+      "args": ["packages/vltx/src/cli.ts", "mcp"],
+      "env": { "VLT_TOKEN": "${VLT_TOKEN}" }
+    }
+  }
+}

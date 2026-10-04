@@ -2,7 +2,7 @@
 
 ## 1. Foundation
 
-- [ ] 1.1 Root workspace, `vlt.json`, justfile, README, AGENTS.md, research notes (justfile and AGENTS.md still missing)
+- [x] 1.1 Root workspace, `vlt.json`, justfile, README, AGENTS.md, research notes
 - [x] 1.2 Profile schema and `config/registry.profiles.json`
 - [x] 1.3 TypeScript reference renderer with unit tests
 - [x] 1.4 Nushell and POSIX sh renderers
@@ -12,7 +12,7 @@
 
 - [x] 2.1 npmjs baseline and hosted vlt.io smoke tests per client
 - [x] 2.2 Local vsr launcher with documented defects and smoke test
-- [ ] 2.3 Cloudflare registry gate Worker with tests
+- [x] 2.3 Cloudflare registry gate Worker with tests
 
 ## 3. Client routing
 
@@ -34,8 +34,8 @@
 
 ## 6. Agent tooling
 
-- [ ] 6.1 vlt MCP server and `.mcp.json`
-- [ ] 6.2 Vendored `dss-query` skill with provenance, repo skill
+- [x] 6.1 vlt MCP server (`vltx mcp`) and `.mcp.json`
+- [x] 6.2 Vendored `dss-query` skill with provenance, repo skill
 
 ## 7. Verification
 

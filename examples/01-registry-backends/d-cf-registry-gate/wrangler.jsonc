@@ -1,0 +1,22 @@
+// vlt-registry-gate. Local: `wrangler dev --local --port 8787`. Deploy (not run in this lab):
+// `wrangler deploy`, then `wrangler secret put GATE_TOKEN` / `UPSTREAM_TOKEN` as needed.
+// The name matches the `gate` profile in config/registry.profiles.json
+// (https://vlt-registry-gate.<subdomain>.workers.dev/).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "vlt-registry-gate",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-04",
+  "observability": { "enabled": true },
+  "upload_source_maps": true,
+  "vars": {
+    "UPSTREAM": "https://registry.npmjs.org",
+    "FAIL_MODE": "closed",
+    "OSV_API": "https://api.osv.dev",
+    "OSV_CACHE_TTL": "600",
+    "PACKUMENT_CACHE_TTL": "60",
+    "OSV_TIMEOUT_MS": "10000"
+  }
+  // Secrets (never in this file): GATE_TOKEN, UPSTREAM_TOKEN.
+  // Local secrets go in .dev.vars (git-ignored at the repository root).
+}

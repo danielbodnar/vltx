@@ -6,7 +6,7 @@ The `vltx` CLI lives in `packages/vltx` (see its README). Start with `HANDOFF.md
 
 | Example | Technique | Status |
 |---|---|---|
-| `examples/01-registry-backends` | npmjs baseline, hosted vlt.io, local vsr, Cloudflare gate | a, b, c built; d (gate Worker) not started |
+| `examples/01-registry-backends` | npmjs baseline, hosted vlt.io, local vsr, Cloudflare gate | a, b, c, d built; d (gate Worker) green locally, not deployed |
 | `examples/02-user-config` | render one profile into every client's user config (diff, apply, restore) | green |
 | `examples/03-path-shims` | npm/pnpm/yarn/bun/npx shims with off, env, vlt, nono modes | green |
 | `examples/04-vlt-as-installer` | install any repo with vlt, gate on security queries, build selectively | green |
