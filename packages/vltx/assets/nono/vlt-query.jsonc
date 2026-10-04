@@ -1,0 +1,43 @@
+// vlt-query: sandbox for `vlt query` with security selectors (:malware, :cve, :scanned, ...).
+// Security selectors fetch package reports from api.socket.dev and cache them in
+// <cache>/vlt/security-archive.db, which the build phase later reads offline.
+{
+  "meta": {
+    "name": "vlt-lab-vlt-query",
+    "description": "vlt query: project read-only, vlt cache read-write (security-archive.db), network only to registry hosts plus api.socket.dev",
+  },
+
+  // vlt query reads node_modules/.vlt-lock.json and vlt.json; observed to need no project writes.
+  "workdir": { "access": "read" },
+
+  "filesystem": {
+    // security-archive.db is a SQLite file; SQLite creates journal files next to it, so the
+    // directory needs write access, not just the file.
+    "allow": ["$XDG_CACHE_HOME/vlt"],
+    // User vlt.json only. The keychain ($XDG_DATA_HOME/vlt) is not granted: :malware and
+    // :scanned worked without credentials against registry.npmjs.org packages.
+    "read": ["$XDG_CONFIG_HOME/vlt"],
+  },
+
+  "network": {
+    // Same fail-closed sentinel as vlt-fetch: with no --allow-domain, every host gets 403.
+    // sandbox-phase adds the registry profile hosts plus api.socket.dev.
+    "allow_domain": ["vlt-lab-no-hosts.invalid"],
+  },
+
+  "linux": {
+    // Same reason as vlt-fetch: the seccomp connect() rate limiter in "auto" mode can deny bursts
+    // of parallel connections. This phase runs only vlt itself.
+    "sandbox_policy": "landlock",
+  },
+
+  "environment": {
+    "allow_vars": [
+      "PATH", "HOME", "USER", "LOGNAME", "LANG", "LANGUAGE", "LC_*", "TERM", "COLORTERM",
+      "NO_COLOR", "FORCE_COLOR", "TZ", "TMPDIR", "XDG_*", "VLT_*", "NODE_ENV",
+      "SSL_CERT_FILE", "NODE_EXTRA_CA_CERTS",
+    ],
+    // Registry tokens are not needed to read security data, so they stay outside this phase.
+    "deny_vars": ["VLT_TOKEN", "VLT_TOKEN_*", "VLT_OTP"],
+  },
+}

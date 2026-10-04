@@ -6,6 +6,8 @@
     }
   },
   "nodes": {
+    "~npm~@modelcontextprotocol+core@2.3.0": [0,"@modelcontextprotocol/core","sha512-09BHFaNVBe5pB2AhzCfLj0cqmsKLERvZQ4FblzP90UMGLaXVqdZPByFjURwsUYCmxonUW2yAwgTTvle+8O2/8w==","https://registry.npmjs.org/@modelcontextprotocol/core/-/core-2.3.0.tgz"],
+    "~npm~@modelcontextprotocol+server@2.3.0": [0,"@modelcontextprotocol/server","sha512-+6b0LdsQLmHsvS7J6sQJ4weTpzUn61fU1JKS+321/+IyDYoHW5CR2Tgqcs6GgAAQvlesCo6yX3xttgmx+XGtJw==","https://registry.npmjs.org/@modelcontextprotocol/server/-/server-2.3.0.tgz"],
     "~npm~@typescript+typescript-aix-ppc64@7.0.2": [3,"@typescript/typescript-aix-ppc64","sha512-MTKKkWB7p/0E9xi1d1tHtZ5PiLkGEMIq88pK2CubZjOsLtYTLqhgIgi6zepFa+9GHZ6h05NMCkQxGKiPXMxXtQ==","https://registry.npmjs.org/@typescript/typescript-aix-ppc64/-/typescript-aix-ppc64-7.0.2.tgz",null,null,null,{  "engines": {    "node": ">=16.20.0"  },  "os": [    "aix"  ],  "cpu": [    "ppc64"  ]}],
     "~npm~@typescript+typescript-darwin-arm64@7.0.2": [3,"@typescript/typescript-darwin-arm64","sha512-gowzar9MwS/aRWp6f3a4KUqzRjAZjOsmGNCM6LcTgXum+dBfgsBVMN+AgvOCCbguXyick6LJhpBszxMebJ8syA==","https://registry.npmjs.org/@typescript/typescript-darwin-arm64/-/typescript-darwin-arm64-7.0.2.tgz",null,null,null,{  "engines": {    "node": ">=16.20.0"  },  "os": [    "darwin"  ],  "cpu": [    "arm64"  ]}],
     "~npm~@typescript+typescript-darwin-x64@7.0.2": [3,"@typescript/typescript-darwin-x64","sha512-SZ9xZInqApNlNGc9s0W1VSsktYSOe9cFqNOIqmN1Gs8SmkjKZYFt017G4VwPxASInODuAdbTW7sXiFUf893RgA==","https://registry.npmjs.org/@typescript/typescript-darwin-x64/-/typescript-darwin-x64-7.0.2.tgz",null,null,null,{  "engines": {    "node": ">=16.20.0"  },  "os": [    "darwin"  ],  "cpu": [    "x64"  ]}],
@@ -32,6 +34,11 @@
   "edges": {
     "workspace~packages+registry-profile typescript": "dev 7.0.2 ~npm~typescript@7.0.2",
     "workspace~packages+registry-profile zod": "prod 4.6.5 ~npm~zod@4.6.5",
+    "workspace~packages+vltx @modelcontextprotocol/server": "prod 2.3.0 ~npm~@modelcontextprotocol+server@2.3.0",
+    "workspace~packages+vltx zod": "prod 4.6.5 ~npm~zod@4.6.5",
+    "~npm~@modelcontextprotocol+core@2.3.0 zod": "prod ^4.2.0 ~npm~zod@4.6.5",
+    "~npm~@modelcontextprotocol+server@2.3.0 @modelcontextprotocol/core": "prod 2.3.0 ~npm~@modelcontextprotocol+core@2.3.0",
+    "~npm~@modelcontextprotocol+server@2.3.0 zod": "prod ^4.2.0 ~npm~zod@4.6.5",
     "~npm~typescript@7.0.2 @typescript/typescript-aix-ppc64": "optional 7.0.2 ~npm~@typescript+typescript-aix-ppc64@7.0.2",
     "~npm~typescript@7.0.2 @typescript/typescript-darwin-arm64": "optional 7.0.2 ~npm~@typescript+typescript-darwin-arm64@7.0.2",
     "~npm~typescript@7.0.2 @typescript/typescript-darwin-x64": "optional 7.0.2 ~npm~@typescript+typescript-darwin-x64@7.0.2",

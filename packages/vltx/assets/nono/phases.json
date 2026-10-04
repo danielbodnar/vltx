@@ -1,0 +1,169 @@
+{
+  "$comment": "Phase table shared by sandbox-phase.sh, sandbox-phase.nu and sandbox-phase.ts. Placeholders: {cache} {data} {config} resolve to XDG_CACHE_HOME, XDG_DATA_HOME, XDG_CONFIG_HOME (with the XDG defaults under HOME). network: 'proxy' = allow only the registry profile hosts plus extraHosts; 'block' = the profile blocks all network. isolateCache: run with XDG_CACHE_HOME pointing at a fresh per-run directory seeded with the listed files from the real cache. requires: files that must exist in the project. toolchain: commands whose install directories get read access (the command's own executable is always included).",
+  "phases": {
+    "fetch": {
+      "description": "vlt install: download and extract, no scripts",
+      "profile": "vlt-fetch.jsonc",
+      "network": "proxy",
+      "extraHosts": [],
+      "requires": [
+        "vlt.json"
+      ],
+      "mkdir": [
+        "{cache}/vlt",
+        "{data}/vlt",
+        "{config}/vlt"
+      ],
+      "command": [
+        "vlt",
+        "install"
+      ],
+      "defaultArgs": [],
+      "toolchain": [
+        "node"
+      ]
+    },
+    "query": {
+      "description": "vlt query with security selectors (fills security-archive.db)",
+      "profile": "vlt-query.jsonc",
+      "network": "proxy",
+      "extraHosts": [
+        "api.socket.dev"
+      ],
+      "requires": [
+        "vlt.json"
+      ],
+      "mkdir": [
+        "{cache}/vlt",
+        "{config}/vlt"
+      ],
+      "command": [
+        "vlt",
+        "query"
+      ],
+      "defaultArgs": [
+        ":malware",
+        "--view=count",
+        "--expect-results=0"
+      ],
+      "toolchain": [
+        "node"
+      ]
+    },
+    "build": {
+      "description": "vlt build: lifecycle scripts, no network",
+      "profile": "vlt-build.jsonc",
+      "permissiveProfile": "vlt-build-permissive.jsonc",
+      "network": "block",
+      "extraHosts": [],
+      "requires": [
+        "vlt.json"
+      ],
+      "mkdir": [
+        "{config}/vlt"
+      ],
+      "isolateCache": [
+        "vlt/security-archive.db"
+      ],
+      "command": [
+        "vlt",
+        "build"
+      ],
+      "defaultArgs": [],
+      "toolchain": [
+        "node"
+      ]
+    },
+    "npm-fetch": {
+      "description": "npm/pnpm/bun install --ignore-scripts",
+      "profile": "npm-fetch.jsonc",
+      "network": "proxy",
+      "extraHosts": [],
+      "requires": [
+        "package.json"
+      ],
+      "mkdir": [
+        "{cache}/npm",
+        "{cache}/pnpm",
+        "{cache}/bun"
+      ],
+      "tools": {
+        "npm": [
+          "npm",
+          "install",
+          "--ignore-scripts",
+          "--no-audit",
+          "--no-fund"
+        ],
+        "pnpm": [
+          "pnpm",
+          "install",
+          "--ignore-scripts"
+        ],
+        "bun": [
+          "bun",
+          "install",
+          "--ignore-scripts"
+        ]
+      },
+      "defaultTool": "npm",
+      "defaultArgs": [],
+      "toolchain": [
+        "node"
+      ]
+    },
+    "native-build": {
+      "description": "npm/pnpm rebuild: lifecycle scripts, no network. pnpm 10 skips unapproved build scripts unless dangerously-allow-all-builds is set; the sandbox is what makes that acceptable here. bun has no rebuild command, so bun trees use npm rebuild (bun installs a hoisted node_modules).",
+      "profile": "native-build.jsonc",
+      "network": "block",
+      "extraHosts": [],
+      "requires": [
+        "package.json"
+      ],
+      "mkdir": [
+        "{cache}/npm"
+      ],
+      "isolateCache": [],
+      "tools": {
+        "npm": [
+          "npm",
+          "rebuild"
+        ],
+        "pnpm": [
+          "pnpm",
+          "rebuild",
+          "--config.dangerously-allow-all-builds=true"
+        ],
+        "bun": [
+          "npm",
+          "rebuild"
+        ]
+      },
+      "defaultTool": "npm",
+      "defaultArgs": [],
+      "toolchain": [
+        "node"
+      ]
+    },
+    "run": {
+      "description": "any command (the args after --) with network limited to the registry profile hosts",
+      "profile": "net-only.jsonc",
+      "network": "proxy",
+      "extraHosts": [],
+      "requires": [],
+      "mkdir": [
+        "{cache}/npm",
+        "{cache}/pnpm",
+        "{cache}/bun",
+        "{cache}/vlt",
+        "{config}/vlt",
+        "{data}/vlt"
+      ],
+      "command": [],
+      "defaultArgs": [],
+      "toolchain": [
+        "node"
+      ]
+    }
+  }
+}
