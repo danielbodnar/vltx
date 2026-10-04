@@ -5,7 +5,14 @@ export type Feature = (typeof FEATURES)[number];
 
 const featureList = (s: string): boolean => s.split(",").every((f) => (FEATURES as readonly string[]).includes(f));
 
-export type Parsed = Readonly<{ flags: GlobalFlags; command?: string; rest: string[]; raw: string[] }>;
+/** Command-local flags that take a separate value (`--flag value`). Their values must not become the command. */
+const LOCAL_VALUE_FLAGS = new Set([
+  "--package-manager-field", "--mode", "--scope", "--gate", "--queries", "--format", "--root",
+  "--project", "--out", "--runner", "--file", "--base", "--target",
+]);
+
+/** `commandIndex` is the position of `command` in `raw` (so raw commands get exactly the argv after it). */
+export type Parsed = Readonly<{ flags: GlobalFlags; command?: string; commandIndex?: number; rest: string[]; raw: string[] }>;
 
 /**
  * Split argv into global flags, the command (first positional) and the rest.
@@ -16,6 +23,7 @@ export const parseArgs = (argv: readonly string[], cwd: string): Parsed => {
   const flags: GlobalFlags = { help: false, yes: false, global: false, dryRun: false, json: false, cwd };
   const rest: string[] = [];
   let command: string | undefined;
+  let commandIndex: number | undefined;
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i] as string;
     const next = argv[i + 1];
@@ -50,8 +58,15 @@ export const parseArgs = (argv: readonly string[], cwd: string): Parsed => {
       const pkgs: string[] = [];
       while (argv[i + 1] !== undefined && !(argv[i + 1] as string).startsWith("-")) pkgs.push(argv[++i] as string);
       flags.install = pkgs;
-    } else if (command === undefined && !a.startsWith("-")) command = a;
+    } else if (LOCAL_VALUE_FLAGS.has(a) && next !== undefined) {
+      // command-local flag with a separate value: keep the pair together so the value is never taken as the command
+      rest.push(a, next);
+      i++;
+    } else if (command === undefined && !a.startsWith("-")) {
+      command = a;
+      commandIndex = i;
+    }
     else rest.push(a);
   }
-  return { flags, command, rest, raw: [...argv] };
+  return { flags, command, commandIndex, rest, raw: [...argv] };
 };

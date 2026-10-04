@@ -12,6 +12,7 @@ export const yellow = color(33);
 export const red = color(31);
 
 export class NotInteractive extends Error {
+  override name = "NotInteractive";
   constructor(what: string, flag: string) {
     super(`${what}: no terminal to ask on; pass ${flag} (or -y for defaults)`);
   }

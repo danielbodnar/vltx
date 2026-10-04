@@ -5,3 +5,5 @@ local-store/
 *.log
 .dev.vars
 reports/
+packages/vltx/dist/
+*.tgz

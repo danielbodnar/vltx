@@ -52,7 +52,7 @@ JQ_COMMON='
       ["VLT_REGISTRY", .npm],
       ["VLT_REGISTRIES", (if .main == null then "npm=\(.npm)" else "npm=\(.npm)\nmain=\(.main)" end)] ]
     + (if routed then [["VLT_SCOPED_REGISTRIES", "\(.scope)=\(.main)"]] else [] end)
-    + (if .scripts == "deny" then [["npm_config_ignore_scripts", "true"], ["YARN_ENABLE_SCRIPTS", "false"]] else [] end);
+    + (if .scripts == "deny" then [["npm_config_ignore_scripts", "true"], ["YARN_ENABLE_SCRIPTS", "false"], ["YARN_IGNORE_SCRIPTS", "true"]] else [] end);
 '
 
 render_target() {

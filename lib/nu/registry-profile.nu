@@ -129,7 +129,7 @@ export def env-pairs [r: record]: nothing -> list {
     [VLT_REGISTRIES $registries]
   ]
   | append (if (routed $r) { [[VLT_SCOPED_REGISTRIES $"($r.scope)=($r.main)"]] } else { [] })
-  | append (if $r.scripts == deny { [[npm_config_ignore_scripts "true"] [YARN_ENABLE_SCRIPTS "false"]] } else { [] })
+  | append (if $r.scripts == deny { [[npm_config_ignore_scripts "true"] [YARN_ENABLE_SCRIPTS "false"] [YARN_IGNORE_SCRIPTS "true"]] } else { [] })
 }
 
 def env-sh [r: record]: nothing -> string {

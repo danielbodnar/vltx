@@ -131,6 +131,7 @@ export const envPairs = (r: Resolved): Array<[string, string]> => [
     ? ([
         ["npm_config_ignore_scripts", "true"],
         ["YARN_ENABLE_SCRIPTS", "false"],
+        ["YARN_IGNORE_SCRIPTS", "true"],
       ] as Array<[string, string]>)
     : []),
 ];

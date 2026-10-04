@@ -2,7 +2,7 @@
 
 Runnable examples for evaluating [vlt](https://docs.vlt.io) as package manager and registry for every JavaScript client (npm, pnpm, yarn, bun, vlt), including installs of untrusted forks under [nono](https://nono.sh) sandboxes. Every piece of glue exists in three interchangeable forms: Nushell 0.116, POSIX sh, and TypeScript on Bun 1.4.
 
-Start with `HANDOFF.md` for current status, `docs/CONVENTIONS.md` for the rules every example follows, and `openspec/changes/add-vlt-evaluation-lab/` for the proposal, specs, and design.
+The `vltx` CLI lives in `packages/vltx` (see its README). Start with `HANDOFF.md` for current status, `docs/CONVENTIONS.md` for the rules every example follows, and `openspec/changes/add-vlt-evaluation-lab/` for the proposal, specs, and design.
 
 | Example | Technique | Status |
 |---|---|---|

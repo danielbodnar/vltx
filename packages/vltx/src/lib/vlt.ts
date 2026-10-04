@@ -8,6 +8,7 @@ export const vltQuery = (
   selector: string,
   opts: { cwd: string; env?: Record<string, string | undefined> },
 ): { ok: boolean; matches: QueryMatch[]; error?: string } => {
+  if (selector.trimStart().startsWith("-")) return { ok: false, matches: [], error: `selector ${JSON.stringify(selector)} must not start with "-"` };
   const r = capture(["vlt", "query", selector, "--view=json"], opts);
   if (r.code !== 0) return { ok: false, matches: [], error: r.stderr.split("\n").find((l) => l.trim()) ?? "vlt query failed" };
   try {

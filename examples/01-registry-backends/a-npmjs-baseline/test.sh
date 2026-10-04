@@ -4,8 +4,8 @@
 #   - smoke.sh --profile npmjs: all five clients install the fixture cold and warm, write a lockfile,
 #     and name registry.npmjs.org as the tarball host; writes results/npmjs.{json,md}
 #   - smoke.nu and smoke.ts produce the same result (ignoring timings and the date)
-#   - lifecycle scripts: the profile denies them; npm, pnpm, bun and vlt run none, yarn classic runs
-#     esbuild's postinstall anyway (documented gap, see README)
+#   - lifecycle scripts: the profile denies them and no client runs them, including yarn classic,
+#     which honours YARN_IGNORE_SCRIPTS from env-sh
 set -eu
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 VL_ROOT=${VL_ROOT:-$(CDPATH= cd -- "$HERE/../../.." && pwd)}
@@ -51,8 +51,8 @@ for c in npm pnpm yarn bun vlt; do
     ok "$c: cold and warm install, lockfile, tarballs from registry.npmjs.org"
   else bad "$c: $row"; fi
 done
-if jq -e '[.clients[] | select(.scripts_ran) | .client] == ["yarn"]' "$R" >/dev/null; then
-  ok "scripts denied by profile: only yarn classic ran esbuild postinstall (known gap)"
+if jq -e '[.clients[] | select(.scripts_ran) | .client] == []' "$R" >/dev/null; then
+  ok "scripts denied by profile: no client ran esbuild postinstall (yarn classic via YARN_IGNORE_SCRIPTS)"
 else bad "unexpected script pattern: $(jq -c '[.clients[] | {client, scripts_ran}]' "$R")"; fi
 if jq -e 'all(.clients[]; .esbuild_bin == "js-shim")' "$R" >/dev/null; then ok "bin/esbuild stays the JS shim for every client"
 else bad "esbuild bin: $(jq -c '[.clients[] | {client, esbuild_bin}]' "$R")"; fi

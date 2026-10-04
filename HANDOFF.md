@@ -1,25 +1,33 @@
-# Handoff (2026-10-04)
+# Handoff (updated 2026-10-04, evening)
 
-Built in a cloud session and handed off for local work. Every example listed as green in `README.md` passed its `test.sh` on 2026-10-04 in an Ubuntu 24.04 sandbox with vlt 1.3.6, nono 0.79.0, Nushell 0.116.0, Bun 1.4.2, Node 22.22, npm 10.9, pnpm 10.28, and yarn 1.22. Each example README has a Results section with what was observed.
+## vltx is built
 
-## Remaining work (openspec tasks still open)
+`packages/vltx` (`@danielbodnar/vltx` 0.1.0) and `packages/create-vltx` (`@danielbodnar/create-vltx` 0.1.0) are implemented to the approved design doc ("vltx: migrate any repo to vlt (design draft v2)"). 132 tests pass under `bun test`; the bundled `dist/vltx.js` runs on Node 22.22 and Bun 1.4.2; both packed tarballs install and run through `npx`.
 
-1. **Fix: 07 fetch phase honors a hostile `vlt.json`.** `examples/07-nono-sandboxing/phases.json` runs plain `vlt install`; a project `vlt.json` containing `{"config":{"allow-scripts":"*"}}` makes lifecycle scripts run inside the fetch sandbox (which has registry network and `VLT_TOKEN`). Change the fetch command to `["vlt","install","--allow-scripts=:not(*)"]` and rerun `examples/07-nono-sandboxing/test.sh`. Example 08 already neutralizes this by sanitizing `vlt.json`, and 04 passes the flag.
-2. **Fix: yarn classic ignores `ignore-scripts=true` and `npm_config_ignore_scripts`.** It honors `YARN_IGNORE_SCRIPTS=true`. Add that pair to `envPairs` in all three renderers (`packages/registry-profile/src/render.ts`, `lib/nu/registry-profile.nu`, `lib/sh/registry-profile.sh`), run `sh test/conformance.sh`, then flip the assertion in `examples/01-registry-backends/a-npmjs-baseline/test.sh` that currently expects the gap.
-3. **Build `examples/01-registry-backends/d-cf-registry-gate`** (spec: `openspec/changes/add-vlt-evaluation-lab/specs/registry-gate/spec.md`). Hono Worker that proxies an npm-compatible upstream, rewrites `dist.tarball` to its own origin, drops versions with OSV `MAL-*` advisories (verified: `api.osv.dev/v1/querybatch` returns `MAL-2025-20690` for `flatmap-stream@0.1.1`), answers 451 for their tarballs, fails closed with a response header when OSV is unreachable, optional Socket source via `SOCKET_API_KEY`. Profiles `gate-local` (port 8787) and `gate` already exist. Versions checked: hono 4.13.13, wrangler 4.147.0, @cloudflare/workers-types 5.20261004.1, @cloudflare/vitest-pool-workers 0.22.0; use today's date as `compatibility_date`. It is already in the root `package.json` workspaces list.
-4. **vlt MCP server** (`packages/vlt-mcp`, spec `agent-tooling`). No official vlt MCP server exists. Use `@modelcontextprotocol/server@2.3.0` (v2 SDK, 2026-07-28 spec): `new McpServer({...})`, `registerTool(name, {description, inputSchema: z.object(...)}, handler)`, `new StdioServerTransport(server).start()` from `@modelcontextprotocol/server/stdio`. Read-only tools: query (selector, project, expect), view, config pick, ping, fleet scan (wrap `examples/06-host-queries/fleet-scan.ts`). Add `.mcp.json` with this server plus Socket's MCP.
-5. **Skills.** Vendor the official `dss-query` skill from `@vltpkg/query@1.3.6` (directory `skills/dss-query/` inside the npm tarball) into `.claude/skills/dss-query/` with a `PROVENANCE.md` recording package, version, and integrity. Write a `vlt-lab` repo skill on choosing and running examples safely.
-6. **Root `justfile` and `AGENTS.md`**, then `docs/results.md` collecting each example's Results table, then `openspec validate add-vlt-evaluation-lab`.
-7. **Decision pending:** Bun type packages are excluded because Socket flags `bun-types@1.4.2` (license 70) and `@types/bun@1.4.2` (quality 47). The `.ts` files run under Bun but are not type-checked.
+Publish from your machine (no npm credentials exist in the cloud session):
 
-## Findings worth knowing before adopting
+```sh
+cd packages/vltx && npm publish --access public --provenance
+cd ../create-vltx && npm publish --access public --provenance
+```
 
-- vlt has no default registry, needs options under `"config"` in `vlt.json`, ignores `.npmrc` and all foreign lockfiles (fresh resolution), and **walks up to an ancestor `vlt.json` or `package.json` to pick its project root**. Any project nested under another project must carry its own `vlt.json` (`{}` works), or vlt installs into the parent.
-- `vlt query ':malware' --expect-results=0` is the CI gate (exit 1 on match). Security data comes from `api.socket.dev`. `:vuln(">=high")` compares the numeric level index, so use `"<=high"` for high or critical.
-- nono passes the whole environment by default; build profiles here use explicit `allow_vars`/`deny_vars`. Under the default `auto` policy, nono's connect rate limiter silently drops parallel fetches, and vlt treats them as missing optional deps; the fetch profiles use `sandbox_policy: landlock`.
-- `vsr` rc.18 is not install-capable as shipped. The undocumented `PROXY=true` var fixes upstream tarballs; publish, scoped routes, and first-packument completeness remain broken. Evidence and draft issue text: `examples/01-registry-backends/c-vsr-local/README.md`.
-- Hosted vlt.io results are `not run (no token)`. Run `examples/01-registry-backends/b-vlt-hosted/setup.sh` with `VLT_ACCOUNT` and `VLT_TOKEN` set.
+`--provenance` needs CI (GitHub Actions with `id-token: write`); from a laptop drop the flag or publish from a workflow.
 
-## Environment-specific notes
+What was verified end to end (fake vlt.io registry proxying npmjs, token-checked): `vltx -y --account acme` on an npm fixture migrates, installs, gates and records; afterwards a plain `vlt install` with only `VLT_TOKEN` set authenticates (5 of 5 requests), because `vlt.json` now sets `config.registry`; `vltx remove` restores the original files.
 
-Several scripts detect this cloud sandbox's egress proxy (`HTTPS_PROXY=http://127.0.0.1:43455`, CA at `/root/.ccr/ca-bundle.crt`) and pass `--upstream-proxy` or extra `--read-file` grants only when those are set. On a normal workstation they are not set and the scripts skip them. Toolchain paths such as `/opt/node22` were resolved at runtime, not hardcoded; check `examples/07-nono-sandboxing/README.md` if a phase reports a missing read grant.
+A safety review found 12 defects (curl option injection from a hostile `vlt.json`, token sent to repo-chosen hosts, unsandboxed `vlt build` during `-y`, path traversal in `remove`, no record after Ctrl-C, and others). All are fixed with regression tests in `packages/vltx/test/regression-review.test.ts`. Behaviour that changed as a result is listed in `packages/vltx/README.md`; the notable ones: `-y` builds only inside the nono build sandbox (without nono it reports pending builds; `--unsafe-build` runs them with secrets stripped), and `answers.base` in a committed `.vltx.json` is ignored unless it matches registry.vlt.io or `VLTX_REGISTRY_BASE`.
+
+## Lab fixes applied
+
+- 07 fetch phase now runs `vlt install --allow-scripts=:not(*)` and grants vlt's own directory (07 test green).
+- Renderers add `YARN_IGNORE_SCRIPTS=true` (conformance 70/70; 01-a now asserts no client runs scripts, green).
+
+## Still open
+
+- vlt.io hosted run with a real token: `op run --env-file=.env.op -- vltx doctor` then `vltx -y` in a scratch repo.
+- `vltx.nu` has no typed flags yet for `--unsafe-build`, `--keep-modified`, `--allow-outside-repo`, `--keep-env` (they pass through).
+- No TypeScript typecheck in CI: `bun-types`/`@types/bun` were excluded on Socket scores; decide whether to add `@types/node` for `tsc --noEmit`.
+- Cloudflare registry gate Worker (lab example 01-d) not built.
+- Upstream issues to raise with vlt: vlt sends `VLT_TOKEN` only to the registry named by `registry`/`VLT_REGISTRY` (docs say otherwise); scoped `main` registry cannot use an env token; vsr rc.18 defects; ancestor `vlt.json` walk-up; `allow-scripts:"*"` in a project vlt.json; `vlt ping` exits 0 on failure.
+
+Earlier findings and the lab's status are in `README.md` and each example's README.
