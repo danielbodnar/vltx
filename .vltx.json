@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "scope": "repo",
+  "createdAt": "2026-10-04T23:28:13.259Z",
+  "updatedAt": "2026-10-04T23:28:13.263Z",
+  "answers": {
+    "skills": [
+      "dss-query",
+      "vltx"
+    ]
+  },
+  "files": [
+    {
+      "path": ".claude/skills/dss-query/LICENSE",
+      "action": "created",
+      "sha256": "1bc9586ce147394287102c0d38dd688a566d69fbe8b58a311a85813bf87099c6",
+      "note": "skill dss-query"
+    },
+    {
+      "path": ".claude/skills/dss-query/PROVENANCE.md",
+      "action": "created",
+      "sha256": "811f50226db32344c22d1307ed169cd32c964bf1f0d8098e5481344b38b700cb",
+      "note": "skill dss-query"
+    },
+    {
+      "path": ".claude/skills/dss-query/REFERENCE.md",
+      "action": "created",
+      "sha256": "b38530913ed473dc8433fa416e621ff91e396668e13485f365c3d8df68f75af8",
+      "note": "skill dss-query"
+    },
+    {
+      "path": ".claude/skills/dss-query/SKILL.md",
+      "action": "created",
+      "sha256": "2824e8114ca56d2cfe1c95505f04d384aa41efc2033d2ebffb00e0ccb9a553f9",
+      "note": "skill dss-query"
+    },
+    {
+      "path": ".claude/skills/dss-query/evals/README.md",
+      "action": "created",
+      "sha256": "adda4342a5fc76f501f6b30963f0be6274e573f382b219cf5be6e1d4ae8ba3bf",
+      "note": "skill dss-query"
+    },
+    {
+      "path": ".claude/skills/dss-query/evals/evals.json",
+      "action": "created",
+      "sha256": "21ce6a03352ba12f7cca1e00ac31cbfc6c895e90bf2155117bd063b7b306796b",
+      "note": "skill dss-query"
+    },
+    {
+      "path": ".claude/skills/dss-query/evals/grade.mjs",
+      "action": "created",
+      "sha256": "82997907afd54a6d92adcd7115e4df8d58ba1c31d19f20ca9f830c28ebb97cea",
+      "note": "skill dss-query"
+    },
+    {
+      "path": ".claude/skills/vltx/SKILL.md",
+      "action": "created",
+      "sha256": "cc71b3e3e7db84686480ef119d0b63d73b5357502e1518e3acac49d8d5b88f7c",
+      "note": "skill vltx"
+    }
+  ],
+  "runs": [
+    {
+      "at": "2026-10-04T23:28:13.263Z",
+      "command": "skills add",
+      "code": 0,
+      "note": "dss-query:installed vltx:installed"
+    }
+  ]
+}

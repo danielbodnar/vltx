@@ -1,0 +1,43 @@
+{
+  "status": "passed",
+  "reason": "",
+  "account": "danielbodnar",
+  "date": "2026-10-04T23:50:51Z",
+  "steps": [
+    {
+      "step": "setup",
+      "ok": true,
+      "detail": "project vlt.json registries: {\"npm\":\"https://registry.vlt.io/danielbodnar/npm/\",\"main\":\"https://registry.vlt.io/danielbodnar/main/\"}; no user vlt.json"
+    },
+    {
+      "step": "registry set",
+      "ok": true,
+      "detail": "config.registry = npm mirror"
+    },
+    {
+      "step": "ping npm",
+      "ok": true,
+      "detail": "status ok, 415 ms"
+    },
+    {
+      "step": "ping main",
+      "ok": true,
+      "detail": "401 without a keychain token (expected: env tokens reach only the default registry)"
+    },
+    {
+      "step": "whoami npm",
+      "ok": true,
+      "detail": "{\"username\":\"danielbodnar\"}"
+    },
+    {
+      "step": "whoami main",
+      "ok": true,
+      "detail": "{\"username\":\"danielbodnar\"}"
+    },
+    {
+      "step": "smoke",
+      "ok": true,
+      "detail": "shared smoke exit 0 (results in /home/claude/vlt-lab/examples/01-registry-backends/b-vlt-hosted/results/vlt-hosted.md)"
+    }
+  ]
+}

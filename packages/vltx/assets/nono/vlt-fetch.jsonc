@@ -1,0 +1,62 @@
+// vlt-fetch: sandbox for `vlt install` / `vlt ci` (resolve, download, extract; no lifecycle scripts run).
+// The built-in `default` profile is always merged underneath, so deny_credentials (~/.ssh, ~/.aws,
+// ~/.npmrc, ...), deny_shell_configs and the system read groups apply without being listed here.
+// Registry hosts are NOT listed here: sandbox-phase passes one --allow-domain per host from the
+// registry profile (render target `hosts`) at runtime.
+{
+  "meta": {
+    "name": "vlt-lab-vlt-fetch",
+    "description": "vlt install/ci: project read-write, vlt cache/data/config, toolchain read, network only to registry hosts through nono's proxy",
+  },
+
+  // The project: node_modules/, vlt-lock.json and node_modules/.vlt-lock.json are written here.
+  "workdir": { "access": "readwrite" },
+
+  "filesystem": {
+    // vlt's cache: registry-client and package-info caches plus the global store (<cache>/vlt/store).
+    // nono silently skips grants for paths that do not exist, so sandbox-phase creates these first.
+    "allow": ["$XDG_CACHE_HOME/vlt"],
+    // User vlt.json (layered under the project vlt.json) and the keychain at
+    // $XDG_DATA_HOME/vlt/auth/keychain.json, which private registries need. Read only: install
+    // never writes either (observed: the data dir stays empty after install).
+    "read": ["$XDG_CONFIG_HOME/vlt", "$XDG_DATA_HOME/vlt"],
+    // The toolchain (node prefix, vlt package dir), CA bundles and file: dependencies outside the
+    // project are machine specific; sandbox-phase adds them with --read / --read-file.
+  },
+
+  "network": {
+    // Sentinel host. Any allow_domain entry starts nono's proxy, and in proxy mode every host
+    // that is not allowlisted gets HTTP 403. Running this profile without --allow-domain
+    // therefore denies all egress instead of falling back to nono's default (network allowed).
+    "allow_domain": ["vlt-lab-no-hosts.invalid"],
+  },
+
+  "linux": {
+    // Landlock-only enforcement for this phase. With the default "auto" policy, proxy mode adds a
+    // seccomp user-notification layer that rate limits connect() calls; vlt opens ~25 parallel
+    // connections for esbuild's optional platform packages, the excess connects are denied, and vlt
+    // silently drops the optional deps (observed: @esbuild/linux-x64 missing, then esbuild's
+    // postinstall fails in the build phase). Landlock still restricts TCP to nono's proxy port.
+    // Trade-off: UDP (DNS) is not filtered. Acceptable here because this phase runs only vlt,
+    // never package scripts.
+    "sandbox_policy": "landlock",
+  },
+
+  "environment": {
+    // nono passes the whole parent environment by default; an explicit allow-list replaces that.
+    // VLT_* carries the registry config from the registry profile (VLT_REGISTRIES, VLT_REGISTRY)
+    // and VLT_TOKEN, which private registries need in this phase only.
+    "allow_vars": [
+      "PATH", "HOME", "USER", "LOGNAME", "LANG", "LANGUAGE", "LC_*", "TERM", "COLORTERM",
+      "NO_COLOR", "FORCE_COLOR", "TZ", "TMPDIR", "XDG_*", "VLT_*", "NODE_ENV",
+      // CA bundles: needed when the upstream proxy intercepts TLS (sandbox-phase grants --read-file).
+      "SSL_CERT_FILE", "NODE_EXTRA_CA_CERTS",
+    ],
+    "set_vars": {
+      // Copy files out of the global store instead of hardlinking them. With hardlinks, a build
+      // script that edits any file in node_modules in place edits the shared store entry for
+      // every project on the machine (documented vlt behaviour, see `vlt help cache`).
+      "VLT_STORE_LINKER": "copy",
+    },
+  },
+}

@@ -1,0 +1,6 @@
+{
+  "config": {
+    "registries": { "npm": "https://registry.npmjs.org/" },
+    "command": { "build": { "target": ":scripts:not(:built):not(:malware)" } }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "vlt-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Runnable examples for evaluating vlt as package manager and registry across every JS client, with nono sandboxing",
+  "license": "MIT",
+  "workspaces": ["packages/*", "examples/01-registry-backends/d-cf-registry-gate"],
+  "engines": { "node": ">=22.22", "bun": ">=1.4.2" }
+}

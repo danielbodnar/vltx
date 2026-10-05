@@ -1,0 +1,12 @@
+{
+  "default": "hostile",
+  "profiles": {
+    "hostile": {
+      "description": "Quoting probe: shell and Nushell metacharacters in every rendered value",
+      "npm": "https://r.example/it's/\"q\"/b\\s/$(touch pwned)/`id`/",
+      "main": "https://r.example/m'ain/$HOME/\"x\"/",
+      "scope": "@it's",
+      "tokenEnv": "VLT_TOKEN"
+    }
+  }
+}

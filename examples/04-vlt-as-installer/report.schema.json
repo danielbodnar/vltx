@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vlt-lab.local/examples/04-vlt-as-installer/report.schema.json",
+  "title": "vlt-install-any report",
+  "description": "Written by the report phase of vlt-install-any (sh, nu and ts implementations produce the same shape).",
+  "type": "object",
+  "required": [
+    "schemaVersion", "tool", "implementation", "generatedAt", "vltVersion", "source", "profile", "detected",
+    "packageManager", "lockfiles", "foreignLockfilesUnchanged", "vltLockfile", "keepForeignLockfile", "workspaces",
+    "npmrc", "vltRoot", "warnings", "phases", "fetch", "gate", "build", "exit"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "tool": { "const": "vlt-install-any" },
+    "implementation": { "enum": ["sh", "nu", "ts"] },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "vltVersion": { "type": ["string", "null"], "description": "Output of `vlt --version`" },
+    "source": { "type": "string", "description": "Absolute, symlink-resolved project directory" },
+    "profile": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["name", "registry"],
+          "properties": { "name": { "type": "string" }, "registry": { "type": "string", "format": "uri" } }
+        }
+      ]
+    },
+    "detected": {
+      "anyOf": [
+        { "type": "null" },
+        { "enum": ["npm", "pnpm", "yarn-classic", "yarn-berry", "bun", "vlt", "unknown"] },
+        { "type": "string", "description": "Any other packageManager field name, copied as written" }
+      ]
+    },
+    "packageManager": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["field", "name", "version"],
+          "properties": {
+            "field": { "type": "string" },
+            "name": { "type": "string" },
+            "version": { "type": ["string", "null"] }
+          }
+        }
+      ]
+    },
+    "lockfiles": { "type": "array", "items": { "$ref": "#/$defs/lockfile" } },
+    "foreignLockfilesUnchanged": { "type": "boolean" },
+    "vltLockfile": { "type": "boolean", "description": "vlt-lock.json exists after the run" },
+    "keepForeignLockfile": { "const": true },
+    "workspaces": { "type": "array", "items": { "$ref": "#/$defs/workspaces" } },
+    "npmrc": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["present", "registryLines", "authLines"],
+          "properties": {
+            "present": { "type": "boolean" },
+            "registryLines": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "registry= and @scope:registry= lines only; URL userinfo replaced by ***"
+            },
+            "authLines": { "type": "integer", "minimum": 0, "description": "Count of auth lines; their values are never copied" }
+          }
+        }
+      ]
+    },
+    "vltRoot": { "type": ["string", "null"], "description": "Directory vlt treats as the project root" },
+    "warnings": { "type": "array", "items": { "$ref": "#/$defs/warning" } },
+    "phases": {
+      "type": "object",
+      "required": ["detect", "fetch", "gate", "build", "report"],
+      "properties": {
+        "detect": { "$ref": "#/$defs/phase" },
+        "fetch": { "$ref": "#/$defs/phase" },
+        "gate": { "$ref": "#/$defs/phase" },
+        "build": { "$ref": "#/$defs/phase" },
+        "report": { "$ref": "#/$defs/phase" }
+      }
+    },
+    "fetch": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["mode", "command", "added", "removed", "changed", "buildQueue", "pinnedRoot", "error"],
+          "properties": {
+            "mode": { "enum": ["install", "ci", null] },
+            "command": { "type": ["array", "null"], "items": { "type": "string" } },
+            "added": { "type": ["integer", "null"], "description": "install: packages added; ci: nodes in the printed lockfile" },
+            "removed": { "type": ["integer", "null"] },
+            "changed": { "type": ["integer", "null"] },
+            "buildQueue": { "type": "array", "items": { "type": "string" }, "description": "vlt node ids that need a build" },
+            "pinnedRoot": { "type": "boolean" },
+            "error": { "type": ["string", "null"] }
+          }
+        }
+      ]
+    },
+    "gate": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["file", "blocked", "rules", "error"],
+          "properties": {
+            "file": { "type": "string" },
+            "blocked": { "type": "boolean" },
+            "rules": { "type": "array", "items": { "$ref": "#/$defs/rule" } },
+            "error": { "type": ["string", "null"] }
+          }
+        }
+      ]
+    },
+    "build": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["skipped", "skipReason", "target", "built", "failed", "pending"],
+          "properties": {
+            "skipped": { "type": "boolean" },
+            "skipReason": { "enum": [null, "no-build", "gate-blocked", "gate-missing"] },
+            "target": { "type": "string" },
+            "built": { "type": "array", "items": { "$ref": "#/$defs/match" } },
+            "failed": { "type": "array", "items": { "$ref": "#/$defs/match" } },
+            "pending": {
+              "oneOf": [{ "type": "null" }, { "type": "array", "items": { "$ref": "#/$defs/match" } }],
+              "description": "Result of :scripts:not(:built) after the build phase (packages awaiting approval)"
+            }
+          }
+        }
+      ]
+    },
+    "exit": { "enum": [0, 1, 2, 3, 4, 5], "description": "First non-zero phase exit code, else 0; the CLI exits with it" }
+  },
+  "$defs": {
+    "match": {
+      "type": "object",
+      "required": ["id", "name", "version"],
+      "properties": {
+        "id": { "type": ["string", "null"], "description": "vlt DepID, e.g. ~npm~esbuild@0.25.0" },
+        "name": { "type": ["string", "null"] },
+        "version": { "type": ["string", "null"] }
+      }
+    },
+    "warning": {
+      "type": "object",
+      "required": ["code", "message"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "examples": [
+            "foreign-lockfile-not-read", "multiple-lockfiles", "packagemanager-mismatch", "pnpm-workspace-ignored",
+            "npmrc-ignored", "vlt-root-escape", "vlt-root-unknown", "gate-<rule name>"
+          ]
+        },
+        "message": { "type": "string" }
+      }
+    },
+    "phase": {
+      "oneOf": [
+        { "type": "null", "description": "Phase did not run" },
+        {
+          "type": "object",
+          "required": ["exit", "durationMs"],
+          "properties": { "exit": { "type": "integer" }, "durationMs": { "type": "integer", "minimum": 0 } }
+        }
+      ]
+    },
+    "lockfile": {
+      "type": "object",
+      "required": ["file", "kind", "foreign", "sha256Before", "sha256After", "unchanged"],
+      "properties": {
+        "file": { "enum": ["npm-shrinkwrap.json", "package-lock.json", "pnpm-lock.yaml", "yarn.lock", "bun.lock", "bun.lockb", "vlt-lock.json"] },
+        "kind": { "enum": ["npm", "pnpm", "yarn-classic", "yarn-berry", "bun", "vlt"] },
+        "foreign": { "type": "boolean" },
+        "sha256Before": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "sha256After": { "type": ["string", "null"] },
+        "unchanged": { "type": "boolean" }
+      }
+    },
+    "workspaces": {
+      "type": "object",
+      "required": ["source", "patterns", "readByVlt"],
+      "properties": {
+        "source": { "enum": ["package.json", "vlt.json", "pnpm-workspace.yaml"] },
+        "patterns": { "type": "array" },
+        "readByVlt": { "type": "boolean" }
+      }
+    },
+    "rule": {
+      "type": "object",
+      "required": ["name", "selector", "expect", "severity", "status", "count", "matches", "expectExit", "error"],
+      "properties": {
+        "name": { "type": "string" },
+        "selector": { "type": "string" },
+        "expect": { "type": "string", "description": "Passed to vlt query --expect-results" },
+        "severity": { "enum": ["block", "warn", "info"] },
+        "status": { "enum": ["pass", "fail", "error"] },
+        "count": { "type": ["integer", "null"] },
+        "matches": { "type": "array", "items": { "$ref": "#/$defs/match" } },
+        "expectExit": { "type": ["integer", "null"] },
+        "error": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

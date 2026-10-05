@@ -1,0 +1,5 @@
+{
+  "config": {
+    "registries": { "npm": "https://registry.npmjs.org/" }
+  }
+}

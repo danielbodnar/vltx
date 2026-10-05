@@ -1,0 +1,11 @@
+{
+  "name": "evil-pkg",
+  "version": "1.0.0",
+  "description": "Harmless stand-in for a hostile dependency: its postinstall tries to read canary secrets, write to HOME, and exfiltrate, logging every outcome",
+  "license": "MIT",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node postinstall.js"
+  }
+}

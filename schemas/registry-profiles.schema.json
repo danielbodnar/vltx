@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "default": {
+      "type": "string"
+    },
+    "profiles": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9-]*$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "npm": {
+            "type": "string",
+            "pattern": "^https?:\\/\\/.+\\/$"
+          },
+          "main": {
+            "type": "string",
+            "pattern": "^https?:\\/\\/.+\\/$"
+          },
+          "scope": {
+            "type": "string",
+            "pattern": "^@"
+          },
+          "tokenEnv": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "hosts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "scripts": {
+            "default": "deny",
+            "type": "string",
+            "enum": [
+              "deny",
+              "allow"
+            ]
+          }
+        },
+        "required": [
+          "npm"
+        ],
+        "additionalProperties": false,
+        "dependentRequired": {
+          "scope": [
+            "main"
+          ],
+          "main": [
+            "scope"
+          ]
+        }
+      }
+    }
+  },
+  "required": [
+    "default",
+    "profiles"
+  ],
+  "additionalProperties": false
+}
