@@ -64,13 +64,20 @@ def main [
     {step: setup, ok: false, detail: $"exit ($setup.exit_code); project registries ($got); user vlt.json (if $user_cfg { 'written' } else { 'absent' })"}
   }
 
+  # 1b. vlt 1.3.6 sends VLT_TOKEN only to the registry named by `registry` (or VLT_REGISTRY); `vlt setup` does not write it
+  let rs = do { cd $p; ^vlt config set $"registry=($npm_url)" } | complete
+  let reg = try { open ($p | path join vlt.json) | get --optional config.registry | default "" } catch { "" }
+  let s1b = if $rs.exit_code == 0 and $reg == $npm_url { {step: "registry set", ok: true, detail: "config.registry = npm mirror"} } else { {step: "registry set", ok: false, detail: $"exit ($rs.exit_code)"} }
+
   # 2. vlt ping (exits 0 even when a registry fails, so the JSON is judged instead)
   let ping = do { cd $p; ^vlt ping } | complete
   let pings = try { $ping.stdout | from json } catch { [] }
   let s2 = [[npm $npm_url] [main $main_url]] | each {|au|
     let hit = $pings | where registry == $au.1
     let r = if ($hit | is-empty) { {status: missing} } else { $hit | first }
-    if $r.status == "ok" { {step: $"ping ($au.0)", ok: true, detail: $"status ok, ($r.time) ms"} } else {
+    if $r.status == "ok" { {step: $"ping ($au.0)", ok: true, detail: $"status ok, ($r.time) ms"} } else if $au.0 == main and ($pings | where registry == $npm_url | get --optional 0.status | default "") == "ok" and (($r | to json --raw) =~ "401") {
+      {step: $"ping ($au.0)", ok: true, detail: "401 without a keychain token (expected: env tokens reach only the default registry)"}
+    } else {
       {step: $"ping ($au.0)", ok: false, detail: $"status ($r.status): ($r.error? | default ($r.statusCode? | default ''))"}
     }
   }
@@ -79,13 +86,14 @@ def main [
   let s3 = [[npm $npm_url] [main $main_url]] | each {|au|
     let w = do { cd $p; ^vlt whoami $"--registry=($au.1)" } | complete
     let ls = $"($w.stdout)($w.stderr)" | lines | where {|l| ($l | str trim) != "" }
-    let line = if ($ls | is-empty) { "" } else { $ls | first | str substring 0..<160 }
+    let js = try { let v = ($w.stdout | from json); if (($v | describe) =~ "^record") { $v | to json --raw } else { "" } } catch { "" }
+    let line = if $js != "" { $js | str substring 0..<160 } else if ($ls | is-empty) { "" } else { $ls | first | str substring 0..<160 }
     if $w.exit_code == 0 { {step: $"whoami ($au.0)", ok: true, detail: $line} } else {
       {step: $"whoami ($au.0)", ok: false, detail: $"exit ($w.exit_code): ($line)"}
     }
   }
 
-  let checks = [$s1] | append $s2 | append $s3
+  let checks = [$s1 $s1b] | append $s2 | append $s3
   let steps = if ($checks | all {|s| $s.ok }) and (not $no_smoke) {
     let r = do { ^nu ($HERE | path join .. a-npmjs-baseline smoke.nu) --profile vlt-hosted --clients $clients --out $out_dir } | complete
     print $r.stdout

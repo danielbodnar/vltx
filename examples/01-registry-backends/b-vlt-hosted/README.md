@@ -53,11 +53,16 @@ Observed 2026-10-04, vlt 1.3.6. Command: `sh test.sh`, **all checks passed** in 
 | Same: `vlt whoami --registry=...` | exit 1 for both (`401 Unauthorized`, "Token not found" on main) |
 | Same: overall | status `failed`, exit 1, smoke not started |
 | `status.json` from sh, nu and ts | identical apart from the date |
-| Real account, five-client smoke | **not run (no token)**; `results/status.json` records `skipped` |
+| Real account `danielbodnar` (2026-10-04, `sh test.sh` with `VLT_ACCOUNT` and `VLT_TOKEN`) | status `passed`: `vlt setup` plus `registry` set to the npm mirror, `vlt ping` npm ok, main 401 without a keychain token (expected), `whoami` returns `danielbodnar` on both registries |
+| Real account, five-client smoke (`results/vlt-hosted.md`) | npm, pnpm, yarn classic, bun and vlt: cold and warm installs exit 0, every tarball from registry.vlt.io, no lifecycle scripts ran |
+| Real account, mirror vs known-bad packages | `flatmap-stream` packument 404 (npmjs still serves the `0.0.1-security` placeholder); `flatmap-stream-0.1.1.tgz` and `event-stream-3.3.6.tgz` 403 (both versions are already gone from npmjs, so this does not prove blocking of malware npm still serves) |
+| Real account, sh, nu and ts parity | identical `status.json` apart from the date and ping time |
 
 ## Known limits
 
-- No real account was available, so nothing here verifies the mirror's malware handling, pnpm 12's failure, or client installs against vlt.io: `not run`.
+- vlt 1.3.6 sends `VLT_TOKEN` only to the registry named by `registry` (or `VLT_REGISTRY`), and `vlt setup` does not write `registry`; setup now sets it (vltx does the same). The scoped `main` registry cannot use an environment token at all, only a keychain token from `vlt login`.
+- The malware check above only covers versions npm has already removed; a version that is still downloadable from npmjs but flagged was not tested.
+- pnpm 12's documented failure against the mirror is `not run` (pnpm 10.28 here).
 - The per-URL token variable names follow the documented sanitisation rule; without a real token it is not observable whether vlt picks them up for `ping`.
 - Network access to `registry.vlt.io` goes through this environment's HTTPS proxy; a result here says nothing about latency elsewhere.
 

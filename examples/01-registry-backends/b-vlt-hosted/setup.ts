@@ -77,6 +77,15 @@ const userCfg = existsSync(join(process.env.XDG_CONFIG_HOME!, "vlt/vlt.json"));
 if (setup.code === 0 && got === want && !userCfg) step("setup", true, `project vlt.json registries: ${got}; no user vlt.json`);
 else step("setup", false, `exit ${setup.code}; project registries ${got}; user vlt.json ${userCfg ? "written" : "absent"}`);
 
+// 1b. vlt 1.3.6 sends VLT_TOKEN only to the registry named by `registry` (or VLT_REGISTRY); `vlt setup` does not write it
+const rs = run(["vlt", "config", "set", `registry=${NPM_URL}`], { cwd: P, capture: true });
+let reg = "";
+try {
+  reg = JSON.parse(readFileSync(join(P, "vlt.json"), "utf8")).config?.registry ?? "";
+} catch { /* keep "" */ }
+if (rs.code === 0 && reg === NPM_URL) step("registry set", true, "config.registry = npm mirror");
+else step("registry set", false, `exit ${rs.code}`);
+
 // 2. vlt ping (exits 0 even when a registry fails, so the JSON is judged instead)
 const ping = run(["vlt", "ping"], { cwd: P, capture: true });
 let pings: Array<Record<string, unknown>> = [];
@@ -86,13 +95,20 @@ try {
 for (const [a, u] of [["npm", NPM_URL], ["main", MAIN_URL]] as const) {
   const r = pings.find((x) => x.registry === u) ?? { status: "missing" };
   if (r.status === "ok") step(`ping ${a}`, true, `status ok, ${r.time} ms`);
+  else if (a === "main" && pings.find((x) => x.registry === NPM_URL)?.status === "ok" && JSON.stringify(r).includes("401"))
+    step(`ping ${a}`, true, "401 without a keychain token (expected: env tokens reach only the default registry)");
   else step(`ping ${a}`, false, `status ${r.status}: ${r.error ?? r.statusCode ?? ""}`);
 }
 
 // 3. vlt whoami against each registry URL
 for (const [a, u] of [["npm", NPM_URL], ["main", MAIN_URL]] as const) {
   const w = run(["vlt", "whoami", `--registry=${u}`], { cwd: P, capture: true });
-  const line = (w.stdout + w.stderr).split("\n").find((l) => l.trim() !== "")?.slice(0, 160) ?? "";
+  let js = "";
+  try {
+    const v: unknown = JSON.parse(w.stdout);
+    if (v !== null && typeof v === "object" && !Array.isArray(v)) js = JSON.stringify(v);
+  } catch { /* not JSON */ }
+  const line = js !== "" ? js.slice(0, 160) : ((w.stdout + w.stderr).split("\n").find((l) => l.trim() !== "")?.slice(0, 160) ?? "");
   step(`whoami ${a}`, w.code === 0, w.code === 0 ? line : `exit ${w.code}: ${line}`);
 }
 

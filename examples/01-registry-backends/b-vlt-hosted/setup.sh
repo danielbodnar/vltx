@@ -68,12 +68,21 @@ if [ "$rc" = 0 ] && [ "$got" = "$want" ] && [ ! -e "$XDG_CONFIG_HOME/vlt/vlt.jso
   step setup true "project vlt.json registries: $got; no user vlt.json"
 else step setup false "exit $rc; project registries $got; user vlt.json $( [ -e "$XDG_CONFIG_HOME/vlt/vlt.json" ] && echo written || echo absent)"; fi
 
+# 1b. vlt 1.3.6 sends VLT_TOKEN only to the registry named by `registry` (or VLT_REGISTRY), and
+# `vlt setup` does not write it; vltx writes it the same way.
+rc=0; (cd "$P" && vlt config set "registry=$NPM_URL") > "$SCR/registry.log" 2>&1 || rc=$?
+if [ "$rc" = 0 ] && [ "$(jq -r '.config.registry // ""' "$P/vlt.json")" = "$NPM_URL" ]; then step "registry set" true "config.registry = npm mirror"
+else step "registry set" false "exit $rc"; fi
+
 # 2. vlt ping (exits 0 even when a registry fails, so the JSON is judged instead)
 (cd "$P" && vlt ping) > "$SCR/ping.json" 2> "$SCR/ping.err" || true
 for alias_url in "npm $NPM_URL" "main $MAIN_URL"; do
   a=${alias_url%% *} u=${alias_url#* }
   r=$(jq -c --arg u "$u" '[.[] | select(.registry == $u)][0] // {status: "missing"}' "$SCR/ping.json" 2>/dev/null || echo '{"status":"unparsable"}')
-  if [ "$(printf '%s' "$r" | jq -r .status)" = ok ]; then step "ping $a" true "$(printf '%s' "$r" | jq -r '"status ok, \(.time) ms"')"
+  if [ "$(printf '%s' "$r" | jq -r .status)" = ok ]; then [ "$a" = npm ] && npm_ping_ok=1; step "ping $a" true "$(printf '%s' "$r" | jq -r '"status ok, \(.time) ms"')"
+  elif [ "$a" = main ] && [ "${npm_ping_ok:-0}" = 1 ] && printf '%s' "$r" | grep -q 401; then
+    # documented limit: the scoped main registry gets no environment token, only a keychain token (vlt login)
+    step "ping $a" true "401 without a keychain token (expected: env tokens reach only the default registry)"
   else step "ping $a" false "$(printf '%s' "$r" | jq -r '"status \(.status): \(.error // .statusCode // "")"')"; fi
 done
 
@@ -81,7 +90,7 @@ done
 for alias_url in "npm $NPM_URL" "main $MAIN_URL"; do
   a=${alias_url%% *} u=${alias_url#* }
   rc=0; (cd "$P" && vlt whoami --registry="$u") > "$SCR/whoami.$a" 2>&1 || rc=$?
-  line=$(grep -v '^[[:space:]]*$' "$SCR/whoami.$a" | head -n 1 | cut -c1-160)
+  line=$(jq -ce 'objects' "$SCR/whoami.$a" 2>/dev/null | head -n 1 | cut -c1-160 || true); [ -n "$line" ] || line=$(grep -v '^[[:space:]]*$' "$SCR/whoami.$a" | head -n 1 | cut -c1-160)
   if [ "$rc" = 0 ]; then step "whoami $a" true "$line"; else step "whoami $a" false "exit $rc: $line"; fi
 done
 

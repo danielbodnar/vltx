@@ -30,10 +30,11 @@ A safety review found 12 defects (curl option injection from a hostile `vlt.json
 - Strict typecheck with `@types/node@22.20.5` and `typescript@7.0.2` (vetted with vlt `:malware`, `:squat`, `:vuln`, `:scripts`, `:obfuscated`, `:network`, `:shell`; all empty). Bun type packages remain excluded.
 - `c-vsr-local/stop.sh` group kill fixed for dash.
 - Full run of all 14 suites, all green: `docs/results.md`.
+- Hosted vlt.io verified with a real token for account `danielbodnar` (vltx doctor, vltx -y on two fixtures, remove, 01-b five-client smoke); 01-b now sets `registry` like vltx and treats the main-registry 401 as the documented keychain-only limit. Details in `docs/results.md`.
+- Repo pushed to Cloudflare Artifacts: `https://5dae265f74e6077ad674a3d855bf9853.artifacts.cloudflare.net/git/danielbodnar/vlt-lab.git` (BitBuilder Cloud account, namespace `danielbodnar`).
 
 ## Still open
 
-- vlt.io hosted run with a real token: `op run --env-file=.env.op -- vltx doctor`, then `vltx -y` in a scratch repo.
 - Deploy the gate (commands in its README) and check the Cache API on workers.dev; a private gate needs `tokenEnv` on the `gate` profile.
 - Publish `@danielbodnar/vltx` and `@danielbodnar/create-vltx`.
 - Upstream issues to raise with vlt: vlt sends `VLT_TOKEN` only to the registry named by `registry`/`VLT_REGISTRY` (docs say otherwise); the scoped `main` registry cannot use an env token; vsr rc.18 defects; ancestor `vlt.json` walk-up; `allow-scripts:"*"` in a project vlt.json; `vlt ping` exits 0 on failure.

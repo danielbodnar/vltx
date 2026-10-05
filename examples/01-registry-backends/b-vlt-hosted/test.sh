@@ -34,6 +34,7 @@ for e in sh nu ts; do
   S=$SCR/fake-$e/status.json
   if [ "$rc" = 1 ] && jq -e '.status == "failed"
       and (.steps[] | select(.step == "setup") | .ok and (.detail | test("no user vlt.json")))
+      and (.steps[] | select(.step == "registry set") | .ok)
       and ([.steps[] | select(.step | test("^(ping|whoami) ")) | .ok] == [false, false, false, false])
       and ([.steps[] | select(.step == "smoke")] == [])' "$S" > /dev/null; then
     ok "setup.$e made-up account: project-only vlt setup, ping and whoami rejected, no smoke, exit 1"
