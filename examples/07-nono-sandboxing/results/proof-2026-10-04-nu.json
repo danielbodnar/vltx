@@ -1,0 +1,235 @@
+{
+  "date": "2026-10-04T23:35:17Z",
+  "registryProfile": "npmjs",
+  "driver": "sandbox-phase.nu",
+  "versions": {
+    "nono": "nono 0.79.0",
+    "vlt": "1.3.6",
+    "node": "v22.22.0",
+    "kernel": "6.18.44-fc-v70",
+    "landlock": "Landlock V6"
+  },
+  "summary": {
+    "passed": 26,
+    "failed": 0,
+    "info": 1
+  },
+  "checks": [
+    {
+      "id": "fetch",
+      "phase": "fetch",
+      "description": "vlt install under vlt-fetch",
+      "expected": "exit 0",
+      "observed": "exit 0",
+      "pass": true
+    },
+    {
+      "id": "allowlist-blocked",
+      "phase": "fetch",
+      "description": "curl https://registry.yarnpkg.com/ inside the fetch sandbox",
+      "expected": "proxy CONNECT 403",
+      "observed": "CONNECT/HTTP: 403 000 (curl exit 56)",
+      "pass": true
+    },
+    {
+      "id": "allowlist-allowed",
+      "phase": "fetch",
+      "description": "curl https://registry.npmjs.org/left-pad inside the fetch sandbox",
+      "expected": "HTTP 200",
+      "observed": "CONNECT/HTTP: 200 200 (curl exit 0)",
+      "pass": true
+    },
+    {
+      "id": "store-copy",
+      "phase": "fetch",
+      "description": "node_modules files are copies, not hardlinks into the global store (VLT_STORE_LINKER=copy)",
+      "expected": "link count 1",
+      "observed": "link count 1",
+      "pass": true
+    },
+    {
+      "id": "query",
+      "phase": "query",
+      "description": "vlt query ':malware' --expect-results=0 under vlt-query",
+      "expected": "exit 0",
+      "observed": "exit 0",
+      "pass": true
+    },
+    {
+      "id": "query-archive",
+      "phase": "query",
+      "description": "security-archive.db written to the vlt cache",
+      "expected": "present",
+      "observed": "present",
+      "pass": true
+    },
+    {
+      "id": "build",
+      "phase": "build",
+      "description": "vlt build under strict vlt-build",
+      "expected": "exit 0",
+      "observed": "exit 0",
+      "pass": true
+    },
+    {
+      "id": "build-read-home",
+      "phase": "build",
+      "description": "postinstall reads $HOME/.ssh/id_canary and $HOME/.config/vlt-lab-canary/token",
+      "expected": "denied",
+      "observed": "ok=false (EACCES)",
+      "pass": true
+    },
+    {
+      "id": "build-write-home",
+      "phase": "build",
+      "description": "postinstall writes $HOME/.bashrc.canary",
+      "expected": "denied, file absent",
+      "observed": "ok=false, file absent",
+      "pass": true
+    },
+    {
+      "id": "build-network",
+      "phase": "build",
+      "description": "postinstall POSTs canary to exfil.invalid.example and registry.yarnpkg.com (fetch, proxy CONNECT, spawned curl)",
+      "expected": "all attempts fail",
+      "observed": "0 of 6 succeeded (EAI_AGAIN;HTTPS_PROXY not set;curl exit 6)",
+      "pass": true
+    },
+    {
+      "id": "build-write-tmp",
+      "phase": "build",
+      "description": "postinstall stages a file in /tmp",
+      "expected": "denied (strict profile excludes system_write_linux)",
+      "observed": "ok=false",
+      "pass": true
+    },
+    {
+      "id": "build-write-project",
+      "phase": "build",
+      "description": "postinstall writes inside its package dir",
+      "expected": "allowed",
+      "observed": "ok=true",
+      "pass": true
+    },
+    {
+      "id": "build-env-token",
+      "phase": "build",
+      "description": "VLT_TOKEN (and other *TOKEN*/*SECRET* names) visible to the build script",
+      "expected": "absent",
+      "observed": "VLT_TOKEN present=false; token-like names: []",
+      "pass": true
+    },
+    {
+      "id": "real-home-untouched",
+      "phase": "safety",
+      "description": "real HOME (/root) has no .bashrc.canary",
+      "expected": "absent",
+      "observed": "absent",
+      "pass": true
+    },
+    {
+      "id": "build-permissive",
+      "phase": "build",
+      "description": "vlt build --permissive: /tmp writable, everything else still denied",
+      "expected": "exit 0; write-tmp allowed; reads/HOME write/network denied; no token",
+      "observed": "exit 0; write-tmp ok=true; read ok=false; write-home ok=false; network ok=0; VLT_TOKEN present=false",
+      "pass": true
+    },
+    {
+      "id": "npm-fetch",
+      "phase": "npm",
+      "description": "npm install --ignore-scripts under npm-fetch",
+      "expected": "exit 0",
+      "observed": "exit 0",
+      "pass": true
+    },
+    {
+      "id": "npm-fetch-noscripts",
+      "phase": "npm",
+      "description": "postinstall during the fetch phase",
+      "expected": "did not run",
+      "observed": "did not run",
+      "pass": true
+    },
+    {
+      "id": "native-build",
+      "phase": "npm",
+      "description": "npm rebuild under native-build",
+      "expected": "exit 0",
+      "observed": "exit 0",
+      "pass": true
+    },
+    {
+      "id": "native-build-canary",
+      "phase": "npm",
+      "description": "same canary attempts under native-build (log in INIT_CWD)",
+      "expected": "reads/HOME write/network denied, project write allowed, no token",
+      "observed": "read ok=false; write-home ok=false; network ok=0; project ok=true; VLT_TOKEN present=false",
+      "pass": true
+    },
+    {
+      "id": "nono-default-env",
+      "phase": "info",
+      "description": "plain 'nono run' (default profile) passes VLT_TOKEN to the child",
+      "expected": "passes (nono does not filter env by default)",
+      "observed": "passes",
+      "pass": true
+    },
+    {
+      "id": "contrast-fetch",
+      "phase": "contrast",
+      "description": "vlt install without nono",
+      "expected": "exit 0",
+      "observed": "exit 0",
+      "pass": true
+    },
+    {
+      "id": "contrast-build",
+      "phase": "contrast",
+      "description": "vlt build without nono",
+      "expected": "exit 0",
+      "observed": "exit 0",
+      "pass": true
+    },
+    {
+      "id": "contrast-read-home",
+      "phase": "contrast",
+      "description": "postinstall reads the canary files",
+      "expected": "succeeds (no sandbox)",
+      "observed": "ok=true",
+      "pass": true
+    },
+    {
+      "id": "contrast-write-home",
+      "phase": "contrast",
+      "description": "postinstall writes $HOME/.bashrc.canary (temporary HOME)",
+      "expected": "succeeds",
+      "observed": "ok=true, file exists",
+      "pass": true
+    },
+    {
+      "id": "contrast-write-tmp",
+      "phase": "contrast",
+      "description": "postinstall stages a file in /tmp",
+      "expected": "succeeds",
+      "observed": "ok=true",
+      "pass": true
+    },
+    {
+      "id": "contrast-env-token",
+      "phase": "contrast",
+      "description": "VLT_TOKEN visible to the build script",
+      "expected": "present",
+      "observed": "VLT_TOKEN present=true",
+      "pass": true
+    },
+    {
+      "id": "contrast-network",
+      "phase": "info",
+      "description": "postinstall network attempts without nono (environment dependent)",
+      "expected": "registry.yarnpkg.com reachable",
+      "observed": "http-post-direct exfil.invalid.example: ENOTFOUND;http-post-proxy exfil.invalid.example: CONNECT 502;spawn-curl exfil.invalid.example: curl exit 56;http-post-direct registry.yarnpkg.com: HTTP 405;http-post-proxy registry.yarnpkg.com: HTTP 405;spawn-curl registry.yarnpkg.com: HTTP 405",
+      "pass": null
+    }
+  ]
+}

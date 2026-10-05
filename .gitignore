@@ -1,3 +1,14 @@
+node_modules/
+.tmp/
+.wrangler/
+local-store/
+*.log
+.dev.vars
+reports/
+packages/vltx/dist/
+*.tgz
+
+# --- GitHub Node template ---
 # Logs
 logs
 *.log

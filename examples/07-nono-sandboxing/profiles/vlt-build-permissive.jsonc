@@ -1,0 +1,38 @@
+// vlt-build-permissive: the strict build profile with two relaxations for toolchains that need
+// them. nono resolves `extends` by profile name only (a file path is rejected with "invalid base
+// profile name"), so this file repeats the strict profile instead of extending it.
+//
+// Relaxation 1: /tmp and $TMPDIR are writable again (system_write_linux is not excluded).
+//   node-gyp, compilers and many install scripts write temporary files there.
+// Relaxation 2: the dangerous_commands entries build tooling uses are allowed as the *startup*
+//   command (for example `sandbox-phase build --permissive --exec -- rm -rf build`). In nono 0.79
+//   this list is checked only for the command nono starts, so it does not change what child
+//   processes of `vlt build` may run in either profile.
+// Unchanged: network blocked, no HOME, token-free environment, isolated cache.
+{
+  "meta": {
+    "name": "vlt-lab-vlt-build-permissive",
+    "description": "vlt build (permissive): strict build plus writable /tmp and startup commands cp/mv/rm/chmod allowed; network still blocked",
+  },
+
+  "workdir": { "access": "readwrite" },
+
+  "commands": {
+    "allow": ["cp", "mv", "rm", "rmdir", "chmod", "chown", "chgrp", "truncate", "xargs", "npm"],
+  },
+
+  "filesystem": {
+    "allow": ["$XDG_CACHE_HOME/vlt"],
+    "read": ["$XDG_CONFIG_HOME/vlt"],
+  },
+
+  "network": { "block": true },
+
+  "environment": {
+    "allow_vars": [
+      "PATH", "HOME", "USER", "LOGNAME", "LANG", "LANGUAGE", "LC_*", "TERM", "COLORTERM",
+      "NO_COLOR", "FORCE_COLOR", "TZ", "TMPDIR", "XDG_*", "VLT_*", "NODE_ENV",
+    ],
+    "deny_vars": ["VLT_TOKEN", "VLT_TOKEN_*", "VLT_OTP"],
+  },
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "../schemas/registry-profiles.schema.json",
+  "default": "npmjs",
+  "profiles": {
+    "npmjs": {
+      "description": "Baseline: the public npm registry, direct",
+      "npm": "https://registry.npmjs.org/"
+    },
+    "vlt-hosted": {
+      "description": "Hosted vlt.io registries: npm mirror (malware blocked at index time) plus private main registry",
+      "npm": "https://registry.vlt.io/{env:VLT_ACCOUNT}/npm/",
+      "main": "https://registry.vlt.io/{env:VLT_ACCOUNT}/main/",
+      "scope": "@{env:VLT_ACCOUNT}",
+      "tokenEnv": "VLT_TOKEN",
+      "hosts": ["api.socket.dev"]
+    },
+    "gate-local": {
+      "description": "Cloudflare registry gate running under wrangler dev",
+      "npm": "http://127.0.0.1:8787/"
+    },
+    "gate": {
+      "description": "Cloudflare registry gate deployed to workers.dev",
+      "npm": "https://vlt-registry-gate.{env:CF_WORKERS_SUBDOMAIN}.workers.dev/",
+      "hosts": ["api.socket.dev"]
+    },
+    "vsr-local": {
+      "description": "vlt serverless registry (vsr) under wrangler dev, npm upstream at /npm/; see examples/01-registry-backends/c-vsr-local for known defects",
+      "npm": "http://127.0.0.1:1337/npm/",
+      "main": "http://127.0.0.1:1337/",
+      "scope": "@local",
+      "tokenEnv": "VSR_TOKEN"
+    }
+  }
+}

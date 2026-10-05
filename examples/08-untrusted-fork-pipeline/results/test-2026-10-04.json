@@ -1,0 +1,749 @@
+{
+  "date": "2026-10-04T23:38:29Z",
+  "passed": 119,
+  "failed": 0,
+  "timings": [
+    {
+      "impl": "sh",
+      "case": "hostile",
+      "exit": 0,
+      "ms": 10468
+    },
+    {
+      "impl": "sh",
+      "case": "permissive",
+      "exit": 0,
+      "ms": 9618
+    },
+    {
+      "impl": "sh",
+      "case": "hostile-cfg",
+      "exit": 0,
+      "ms": 9756
+    },
+    {
+      "impl": "sh",
+      "case": "npm",
+      "exit": 0,
+      "ms": 10107
+    },
+    {
+      "impl": "sh",
+      "case": "scripts",
+      "exit": 0,
+      "ms": 10548
+    },
+    {
+      "impl": "sh",
+      "case": "gate-block",
+      "exit": 3,
+      "ms": 4586
+    },
+    {
+      "impl": "sh",
+      "case": "native",
+      "exit": 0,
+      "ms": 5982
+    },
+    {
+      "impl": "nu",
+      "case": "hostile",
+      "exit": 0,
+      "ms": 10456
+    },
+    {
+      "impl": "nu",
+      "case": "hostile-cfg",
+      "exit": 0,
+      "ms": 8261
+    },
+    {
+      "impl": "nu",
+      "case": "npm",
+      "exit": 0,
+      "ms": 9196
+    },
+    {
+      "impl": "nu",
+      "case": "scripts",
+      "exit": 0,
+      "ms": 9012
+    },
+    {
+      "impl": "nu",
+      "case": "gate-block",
+      "exit": 3,
+      "ms": 4019
+    },
+    {
+      "impl": "nu",
+      "case": "native",
+      "exit": 0,
+      "ms": 5664
+    },
+    {
+      "impl": "ts",
+      "case": "hostile",
+      "exit": 0,
+      "ms": 8657
+    },
+    {
+      "impl": "ts",
+      "case": "hostile-cfg",
+      "exit": 0,
+      "ms": 8991
+    },
+    {
+      "impl": "ts",
+      "case": "npm",
+      "exit": 0,
+      "ms": 8919
+    },
+    {
+      "impl": "ts",
+      "case": "scripts",
+      "exit": 0,
+      "ms": 8972
+    },
+    {
+      "impl": "ts",
+      "case": "gate-block",
+      "exit": 3,
+      "ms": 4024
+    },
+    {
+      "impl": "ts",
+      "case": "native",
+      "exit": 0,
+      "ms": 5805
+    },
+    {
+      "impl": "sh",
+      "case": "real",
+      "exit": 0,
+      "ms": 27208
+    }
+  ],
+  "checks": [
+    {
+      "id": "dash -n fork-install.sh",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "dash -n test.sh",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sanitize-vlt-json.jq strips the hostile overlay",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "workflow parses as YAML (Bun.YAML)",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "workflow pins nono v0.79.0 with sha256 and uses permissions: contents: read",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh: no source exits 2",
+      "pass": true,
+      "observed": "exit 2"
+    },
+    {
+      "id": "sh: missing path exits 2",
+      "pass": true,
+      "observed": "exit 2"
+    },
+    {
+      "id": "nu: no source exits 2",
+      "pass": true,
+      "observed": "exit 2"
+    },
+    {
+      "id": "nu: missing path exits 2",
+      "pass": true,
+      "observed": "exit 2"
+    },
+    {
+      "id": "ts: no source exits 2",
+      "pass": true,
+      "observed": "exit 2"
+    },
+    {
+      "id": "ts: missing path exits 2",
+      "pass": true,
+      "observed": "exit 2"
+    },
+    {
+      "id": "sh hostile: exit 0",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh hostile: evil-pkg built by vlt build",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh hostile: build ran under vlt-build.jsonc with network blocked",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh hostile: fetch and gate ran under the proxy profiles, nothing denied",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh hostile: canary-attempts.log written (postinstall ran)",
+      "pass": true,
+      "observed": "/home/claude/vlt-lab/.tmp/fork-install.n0Xbhw/repo/vendor/evil-pkg/canary-attempts.log"
+    },
+    {
+      "id": "sh hostile: postinstall ran inside the build phase window, not during fetch",
+      "pass": true,
+      "observed": "script at 1791156934878; build 1791156934515..1791156935243; fetch 1791156926998..1791156927718"
+    },
+    {
+      "id": "sh hostile: script environment carries NONO_CAP_FILE (it ran under nono)",
+      "pass": true,
+      "observed": "NONO_CAP_FILE present=true"
+    },
+    {
+      "id": "sh hostile: canary reads of HOME secrets denied",
+      "pass": true,
+      "observed": "ok=false EACCES "
+    },
+    {
+      "id": "sh hostile: write to HOME denied",
+      "pass": true,
+      "observed": "ok=false, file absent"
+    },
+    {
+      "id": "sh hostile: all exfiltration attempts failed",
+      "pass": true,
+      "observed": "0 of 6 succeeded"
+    },
+    {
+      "id": "sh hostile: /tmp write denied (strict profile)",
+      "pass": true,
+      "observed": "ok=false"
+    },
+    {
+      "id": "sh hostile: write inside its own package dir allowed",
+      "pass": true,
+      "observed": "ok=true"
+    },
+    {
+      "id": "sh hostile: no VLT_TOKEN or token-like variables in the script env",
+      "pass": true,
+      "observed": "false "
+    },
+    {
+      "id": "sh permissive: exit 0 under vlt-build-permissive.jsonc",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh permissive: /tmp writable, reads, HOME write, network and token still denied",
+      "pass": true,
+      "observed": "write-tmp=true read=false write-home=false net-ok=0 token=false"
+    },
+    {
+      "id": "sh hostile-cfg: exit 0",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh hostile-cfg: no lifecycle script ran during fetch despite allow-scripts \"*\"",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh hostile-cfg: evil-pkg pending, build skipped",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh hostile-cfg: fetch used 04's --allow-scripts=:not(*)",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh hostile-cfg: dangerous vlt.json keys recorded",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh hostile-cfg: project vlt.json rewritten to the graph keys only",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh hostile-cfg: .npmrc and .pnpmfile.cjs moved aside",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh hostile-cfg: escaping symlink removed, inner symlink kept",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh hostile-cfg: fetch reached only the profile registry (no denials)",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh npm-project: exit 0, detected npm, lockfile untouched",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh npm-project: nothing to build",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh scripts-project: exit 0, esbuild built, nothing pending",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh scripts-project: built esbuild runs inside the build sandbox",
+      "pass": true,
+      "observed": "esbuild --version: 0.25.0"
+    },
+    {
+      "id": "sh gate-block: exit 3",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh gate-block: gate blocked on left-pad, build phase never started",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh gate-block: no package built",
+      "pass": true,
+      "observed": ":built count 0"
+    },
+    {
+      "id": "sh native: exit 0, npm-fetch then native-build, gate not run",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "sh native: postinstall ran inside the native-build window (hostile .npmrc ignore-scripts=false had no effect on fetch)",
+      "pass": true,
+      "observed": "script at 1791156985472; build 1791156985058..1791156986428"
+    },
+    {
+      "id": "sh native: reads, HOME write and network denied, no token",
+      "pass": true,
+      "observed": "read=false write-home=false net-ok=0 token=false"
+    },
+    {
+      "id": "sh native: /tmp write (native-build keeps /tmp writable)",
+      "pass": null,
+      "observed": "ok=true"
+    },
+    {
+      "id": "nu hostile: exit 0",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu hostile: evil-pkg built by vlt build",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu hostile: build ran under vlt-build.jsonc with network blocked",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu hostile: fetch and gate ran under the proxy profiles, nothing denied",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu hostile: canary-attempts.log written (postinstall ran)",
+      "pass": true,
+      "observed": "/home/claude/vlt-lab/.tmp/fork-install.GRHKb5/repo/vendor/evil-pkg/canary-attempts.log"
+    },
+    {
+      "id": "nu hostile: postinstall ran inside the build phase window, not during fetch",
+      "pass": true,
+      "observed": "script at 1791156996548; build 1791156996216..1791156996884; fetch 1791156988712..1791156990761"
+    },
+    {
+      "id": "nu hostile: script environment carries NONO_CAP_FILE (it ran under nono)",
+      "pass": true,
+      "observed": "NONO_CAP_FILE present=true"
+    },
+    {
+      "id": "nu hostile: canary reads of HOME secrets denied",
+      "pass": true,
+      "observed": "ok=false EACCES "
+    },
+    {
+      "id": "nu hostile: write to HOME denied",
+      "pass": true,
+      "observed": "ok=false, file absent"
+    },
+    {
+      "id": "nu hostile: all exfiltration attempts failed",
+      "pass": true,
+      "observed": "0 of 6 succeeded"
+    },
+    {
+      "id": "nu hostile: /tmp write denied (strict profile)",
+      "pass": true,
+      "observed": "ok=false"
+    },
+    {
+      "id": "nu hostile: write inside its own package dir allowed",
+      "pass": true,
+      "observed": "ok=true"
+    },
+    {
+      "id": "nu hostile: no VLT_TOKEN or token-like variables in the script env",
+      "pass": true,
+      "observed": "false "
+    },
+    {
+      "id": "nu hostile-cfg: exit 0",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu hostile-cfg: no lifecycle script ran during fetch despite allow-scripts \"*\"",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu hostile-cfg: evil-pkg pending, build skipped",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu hostile-cfg: fetch used 04's --allow-scripts=:not(*)",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu hostile-cfg: dangerous vlt.json keys recorded",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu hostile-cfg: project vlt.json rewritten to the graph keys only",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu hostile-cfg: .npmrc and .pnpmfile.cjs moved aside",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu hostile-cfg: escaping symlink removed, inner symlink kept",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu hostile-cfg: fetch reached only the profile registry (no denials)",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu npm-project: exit 0, detected npm, lockfile untouched",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu npm-project: nothing to build",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu scripts-project: exit 0, esbuild built, nothing pending",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu gate-block: exit 3",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu gate-block: gate blocked on left-pad, build phase never started",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu gate-block: no package built",
+      "pass": true,
+      "observed": ":built count 0"
+    },
+    {
+      "id": "nu native: exit 0, npm-fetch then native-build, gate not run",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "nu native: postinstall ran inside the native-build window (hostile .npmrc ignore-scripts=false had no effect on fetch)",
+      "pass": true,
+      "observed": "script at 1791157032570; build 1791157032175..1791157033615"
+    },
+    {
+      "id": "nu native: reads, HOME write and network denied, no token",
+      "pass": true,
+      "observed": "read=false write-home=false net-ok=0 token=false"
+    },
+    {
+      "id": "nu native: /tmp write (native-build keeps /tmp writable)",
+      "pass": null,
+      "observed": "ok=true"
+    },
+    {
+      "id": "ts hostile: exit 0",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts hostile: evil-pkg built by vlt build",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts hostile: build ran under vlt-build.jsonc with network blocked",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts hostile: fetch and gate ran under the proxy profiles, nothing denied",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts hostile: canary-attempts.log written (postinstall ran)",
+      "pass": true,
+      "observed": "/home/claude/vlt-lab/.tmp/fork-install.hPLyJF/repo/vendor/evil-pkg/canary-attempts.log"
+    },
+    {
+      "id": "ts hostile: postinstall ran inside the build phase window, not during fetch",
+      "pass": true,
+      "observed": "script at 1791157042131; build 1791157041724..1791157042461; fetch 1791157035787..1791157036275"
+    },
+    {
+      "id": "ts hostile: script environment carries NONO_CAP_FILE (it ran under nono)",
+      "pass": true,
+      "observed": "NONO_CAP_FILE present=true"
+    },
+    {
+      "id": "ts hostile: canary reads of HOME secrets denied",
+      "pass": true,
+      "observed": "ok=false EACCES "
+    },
+    {
+      "id": "ts hostile: write to HOME denied",
+      "pass": true,
+      "observed": "ok=false, file absent"
+    },
+    {
+      "id": "ts hostile: all exfiltration attempts failed",
+      "pass": true,
+      "observed": "0 of 6 succeeded"
+    },
+    {
+      "id": "ts hostile: /tmp write denied (strict profile)",
+      "pass": true,
+      "observed": "ok=false"
+    },
+    {
+      "id": "ts hostile: write inside its own package dir allowed",
+      "pass": true,
+      "observed": "ok=true"
+    },
+    {
+      "id": "ts hostile: no VLT_TOKEN or token-like variables in the script env",
+      "pass": true,
+      "observed": "false "
+    },
+    {
+      "id": "ts hostile-cfg: exit 0",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts hostile-cfg: no lifecycle script ran during fetch despite allow-scripts \"*\"",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts hostile-cfg: evil-pkg pending, build skipped",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts hostile-cfg: fetch used 04's --allow-scripts=:not(*)",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts hostile-cfg: dangerous vlt.json keys recorded",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts hostile-cfg: project vlt.json rewritten to the graph keys only",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts hostile-cfg: .npmrc and .pnpmfile.cjs moved aside",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts hostile-cfg: escaping symlink removed, inner symlink kept",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts hostile-cfg: fetch reached only the profile registry (no denials)",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts npm-project: exit 0, detected npm, lockfile untouched",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts npm-project: nothing to build",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts scripts-project: exit 0, esbuild built, nothing pending",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts gate-block: exit 3",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts gate-block: gate blocked on left-pad, build phase never started",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts gate-block: no package built",
+      "pass": true,
+      "observed": ":built count 0"
+    },
+    {
+      "id": "ts native: exit 0, npm-fetch then native-build, gate not run",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "ts native: postinstall ran inside the native-build window (hostile .npmrc ignore-scripts=false had no effect on fetch)",
+      "pass": true,
+      "observed": "script at 1791157078363; build 1791157077960..1791157079472"
+    },
+    {
+      "id": "ts native: reads, HOME write and network denied, no token",
+      "pass": true,
+      "observed": "read=false write-home=false net-ok=0 token=false"
+    },
+    {
+      "id": "ts native: /tmp write (native-build keeps /tmp writable)",
+      "pass": null,
+      "observed": "ok=true"
+    },
+    {
+      "id": "parity hostile: sh, nu and ts reports agree on key fields",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "parity hostile-cfg: sh, nu and ts reports agree on key fields",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "parity npm: sh, nu and ts reports agree on key fields",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "parity scripts: sh, nu and ts reports agree on key fields",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "parity gate-block: sh, nu and ts reports agree on key fields",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "parity native: sh, nu and ts reports agree on key fields",
+      "pass": true,
+      "observed": "ok"
+    },
+    {
+      "id": "parity: canary outcomes identical across sh, nu, ts",
+      "pass": true,
+      "observed": "[\"context\",true] [\"http-post-direct\",false] [\"http-post-direct\",false] [\"http-post-proxy\",false] [\"http-post-proxy\",false] [\"read-home-secret\",false] [\"read-home-secret\",false] [\"spawn-curl\",false] [\"spawn-curl\",false] [\"write-home\",false] [\"write-project\",true] [\"write-tmp\",false] "
+    },
+    {
+      "id": "layer: 04 fetch phase under 07 fetch sandbox, hostile allow-scripts kept: no script ran",
+      "pass": true,
+      "observed": "exit 0, canary log: none"
+    },
+    {
+      "id": "layer contrast: plain vlt install with the hostile vlt.json runs the postinstall during fetch",
+      "pass": true,
+      "observed": "VLT_TOKEN present=true, HTTPS_PROXY set=true"
+    },
+    {
+      "id": "layer contrast: what that fetch-phase script could do (info)",
+      "pass": null,
+      "observed": "read-home-secret id_canary: EACCES;read-home-secret token: EACCES;write-home .bashrc.canary: EACCES;http-post-proxy exfil.invalid.example: 403;http-post-proxy registry.yarnpkg.com: 403;write-tmp vlt-lab-canary-23419.txt: ok;"
+    },
+    {
+      "id": "real repo https://github.com/sindresorhus/is: cloned and reported",
+      "pass": true,
+      "observed": "exit 0 in 27208ms"
+    },
+    {
+      "id": "real repo https://github.com/sindresorhus/is: summary",
+      "pass": null,
+      "observed": "commit e9c026c611c1; exit 0; acquire=0/678ms detect=0/150ms fetch=0/11223ms gate=0/6664ms build=0/2688ms report=0/417ms; added 477; built 1: unrs-resolver; pending 1; denied ; gate warnings gate-cve,gate-vuln-high,gate-squat"
+    },
+    {
+      "id": "no fork-install scratch dirs left in <repo>/.tmp",
+      "pass": true,
+      "observed": "before 0, after 0"
+    },
+    {
+      "id": "real HOME (/root) has no .bashrc.canary",
+      "pass": true,
+      "observed": "absent"
+    }
+  ]
+}

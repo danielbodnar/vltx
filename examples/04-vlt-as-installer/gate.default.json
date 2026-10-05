@@ -1,0 +1,13 @@
+{
+  "description": "Default vlt-install-any gate: block on malware, warn on vulnerabilities and suspicious code, report unbuilt scripts and abandoned packages",
+  "rules": [
+    { "name": "malware", "selector": ":malware", "expect": "0", "severity": "block" },
+    { "name": "cve", "selector": ":cve", "expect": "0", "severity": "warn" },
+    { "name": "vuln-high", "selector": ":vuln(\"<=high\")", "expect": "0", "severity": "warn",
+      "note": "vlt 1.3.6 compares the level index (critical=0, high=1, medium=2, low=3), so \"<=high\" means high or critical; \">=high\" would also match low" },
+    { "name": "obfuscated", "selector": ":obfuscated", "expect": "0", "severity": "warn" },
+    { "name": "squat", "selector": ":squat", "expect": "0", "severity": "warn" },
+    { "name": "unbuilt-scripts", "selector": ":scripts:not(:built)", "expect": "0", "severity": "info" },
+    { "name": "abandoned", "selector": ":abandoned", "expect": "0", "severity": "info" }
+  ]
+}

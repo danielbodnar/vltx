@@ -1,0 +1,126 @@
+{
+  "profile": "vsr-local",
+  "registry": "http://127.0.0.1:1337/npm/",
+  "date": "2026-10-04T23:39:38Z",
+  "entrypoint": "sh",
+  "fixture": {
+    "is-number": "7.0.0",
+    "left-pad": "1.3.0"
+  },
+  "notes": [
+    "yarn classic project .npmrc gets always-auth=true (yarn 1.22 sends _authToken only with it)",
+    "vlt receives VSR_TOKEN as VLT_TOKEN"
+  ],
+  "clients": [
+    {
+      "client": "npm",
+      "version": "10.9.4",
+      "cold": {
+        "exit": 1,
+        "ms": 342
+      },
+      "warm": null,
+      "lockfile": "package-lock.json",
+      "lockfile_written": false,
+      "scripts_ran": false,
+      "script_events": [],
+      "esbuild_bin": "missing",
+      "tarball_hosts": [],
+      "host_source": "lockfile resolved URLs",
+      "installed": {
+        "is-number": "",
+        "left-pad": ""
+      },
+      "installed_ok": false,
+      "error": "npm error 404 Not Found - GET http://127.0.0.1:1337/npm/left-pad/-/left-pad-1.3.0.tgz - Not found"
+    },
+    {
+      "client": "pnpm",
+      "version": "10.28.0",
+      "cold": {
+        "exit": 1,
+        "ms": 550
+      },
+      "warm": null,
+      "lockfile": "pnpm-lock.yaml",
+      "lockfile_written": false,
+      "scripts_ran": false,
+      "script_events": [],
+      "esbuild_bin": "missing",
+      "tarball_hosts": [],
+      "host_source": "lockfile has integrity only; default registry from node_modules/.modules.yaml",
+      "installed": {
+        "is-number": "",
+        "left-pad": ""
+      },
+      "installed_ok": false,
+      "error": " ERR_PNPM_FETCH_404  GET http://127.0.0.1:1337/npm/left-pad/-/left-pad-1.3.0.tgz: Not Found - 404"
+    },
+    {
+      "client": "yarn",
+      "version": "1.22.22",
+      "cold": {
+        "exit": 1,
+        "ms": 314
+      },
+      "warm": null,
+      "lockfile": "yarn.lock",
+      "lockfile_written": false,
+      "scripts_ran": false,
+      "script_events": [],
+      "esbuild_bin": "missing",
+      "tarball_hosts": [],
+      "host_source": "lockfile resolved URLs",
+      "installed": {
+        "is-number": "",
+        "left-pad": ""
+      },
+      "installed_ok": false,
+      "error": "error Error: http://127.0.0.1:1337/npm/left-pad/-/left-pad-1.3.0.tgz: Request failed \"404 Not Found\""
+    },
+    {
+      "client": "bun",
+      "version": "1.4.2",
+      "cold": {
+        "exit": 1,
+        "ms": 46
+      },
+      "warm": null,
+      "lockfile": "bun.lock",
+      "lockfile_written": false,
+      "scripts_ran": false,
+      "script_events": [],
+      "esbuild_bin": "missing",
+      "tarball_hosts": [],
+      "host_source": "bun.lock URLs, empty URL means bun's default registry.npmjs.org",
+      "installed": {
+        "is-number": "",
+        "left-pad": ""
+      },
+      "installed_ok": false,
+      "error": "error: GET http://127.0.0.1:1337/npm/is-number/-/is-number-7.0.0.tgz - 404"
+    },
+    {
+      "client": "vlt",
+      "version": "1.3.6",
+      "cold": {
+        "exit": 1,
+        "ms": 329
+      },
+      "warm": null,
+      "lockfile": "vlt-lock.json",
+      "lockfile_written": false,
+      "scripts_ran": false,
+      "script_events": [],
+      "esbuild_bin": "missing",
+      "tarball_hosts": [],
+      "host_source": "vlt-lock.json registry aliases",
+      "installed": {
+        "is-number": "",
+        "left-pad": ""
+      },
+      "installed_ok": false,
+      "error": "Resolve Error: 404 Not Found — Not found when fetching the tarball for is-number@7.0.0. The resolved version may have been unpublished, or the registry may be misconfigured or unreachable."
+    }
+  ]
+}

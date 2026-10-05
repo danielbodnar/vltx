@@ -1,0 +1,7 @@
+{
+  "status": "skipped",
+  "reason": "VLT_ACCOUNT and VLT_TOKEN are required (see README: how to provide the token)",
+  "account": "",
+  "date": "2026-10-04T18:38:10Z",
+  "steps": []
+}

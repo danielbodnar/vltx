@@ -1,0 +1,16 @@
+{
+  "name": "@vlt-lab/registry-profile",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Registry profile schema and the reference renderer for client configuration",
+  "exports": { ".": "./src/index.ts" },
+  "bin": { "registry-profile": "./src/cli.ts" },
+  "scripts": {
+    "test": "bun test",
+    "test:vitest": "vitest run",
+    "schema": "bun src/cli.ts schema > ../../schemas/registry-profiles.schema.json"
+  },
+  "dependencies": { "zod": "4.6.5" },
+  "devDependencies": { "typescript": "7.0.2" }
+}
