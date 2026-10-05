@@ -26,7 +26,9 @@ export const Profile = z
   .strict()
   .refine((p) => (p.scope === undefined) === (p.main === undefined), {
     message: "scope and main must be set together",
-  });
+  })
+  // the refine is invisible to z.toJSONSchema; state the same rule for editors and other validators
+  .meta({ dependentRequired: { scope: ["main"], main: ["scope"] } });
 
 export const ProfilesDoc = z
   .object({

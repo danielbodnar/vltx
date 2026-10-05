@@ -34,14 +34,16 @@ const MAX_REDIRECTS = 5;
 /**
  * curl arguments for the fallback: the URL is always passed as `--url <normalized URL>` (never as a
  * bare positional that could be read as an option), protocols are limited to http and https, and the
- * body goes to a file. With an Authorization header (read from a 0600 file, never argv) curl does not
- * follow redirects at all, so the token cannot travel to another host.
+ * body goes to a file. Headers are read from a 0600 file, never argv. With credentials among them
+ * (`sensitive`, the default whenever a header file is given) curl does not follow redirects at all, so
+ * the token cannot travel to another host; other headers (such as Accept) keep redirects on.
  */
-export const curlArgs = (url: URL, max: number, dest: string, headerFile?: string): string[] => [
+export const curlArgs = (url: URL, max: number, dest: string, headerFile?: string, sensitive = headerFile !== undefined): string[] => [
   "-fsS",
   "--proto",
   "=https,http",
-  ...(headerFile ? ["-H", `@${headerFile}`] : ["-L", "--proto-redir", "=https,http", "--max-redirs", String(MAX_REDIRECTS)]),
+  ...(headerFile ? ["-H", `@${headerFile}`] : []),
+  ...(sensitive ? [] : ["-L", "--proto-redir", "=https,http", "--max-redirs", String(MAX_REDIRECTS)]),
   "--max-filesize",
   String(max),
   "--url",
@@ -50,8 +52,10 @@ export const curlArgs = (url: URL, max: number, dest: string, headerFile?: strin
   dest,
 ];
 
+const isCredential = (k: string): boolean => k.toLowerCase() === "authorization" || k.toLowerCase() === "cookie";
+
 const withoutAuth = (h: Record<string, string>): Record<string, string> =>
-  Object.fromEntries(Object.entries(h).filter(([k]) => k.toLowerCase() !== "authorization" && k.toLowerCase() !== "cookie"));
+  Object.fromEntries(Object.entries(h).filter(([k]) => !isCredential(k)));
 
 /**
  * GET a URL into memory. Only http(s) URLs are accepted (checked before fetch or curl run). Redirects
@@ -91,14 +95,15 @@ export const download = async (url: string, opts: { maxBytes?: number; headers?:
   if (!which("curl")) throw new Error(`GET ${first.href}: ${(netErr as Error)?.message ?? netErr}`);
   const dir = mkdtempSync(join(tmpdir(), "vltx-dl."));
   try {
-    const auth = Object.entries(opts.headers ?? {});
+    const headers = Object.entries(opts.headers ?? {});
     let headerFile: string | undefined;
-    if (auth.length > 0) {
+    if (headers.length > 0) {
       headerFile = join(dir, "headers");
-      writeFileSync(headerFile, `${auth.map(([k, v]) => `${k}: ${v}`).join("\n")}\n`, { mode: 0o600 });
+      writeFileSync(headerFile, `${headers.map(([k, v]) => `${k}: ${v}`).join("\n")}\n`, { mode: 0o600 });
     }
     const dest = join(dir, "body");
-    const raw = spawnSync("curl", curlArgs(first, max, dest, headerFile), { encoding: "utf8" });
+    const sensitive = headers.some(([k]) => isCredential(k));
+    const raw = spawnSync("curl", curlArgs(first, max, dest, headerFile, sensitive), { encoding: "utf8" });
     if (raw.status !== 0)
       throw new Error(`GET ${first.href}: ${(netErr as Error)?.message ?? netErr}; curl exited ${raw.status}: ${String(raw.stderr ?? "").trim()}`);
     return new Uint8Array(readFileSync(dest));

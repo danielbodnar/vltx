@@ -54,7 +54,15 @@
         "required": [
           "npm"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "dependentRequired": {
+          "scope": [
+            "main"
+          ],
+          "main": [
+            "scope"
+          ]
+        }
       }
     }
   },

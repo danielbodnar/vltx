@@ -81,8 +81,8 @@ render_target() {
           + (if routed then {"scoped-registries": {(.scope): .main}} else {} end)
           + { command: { build: { target: ":scripts:not(:built):not(:malware)" } } }) }
         | tojson' ;;
-    env-sh) prog='[header] + (envpairs | map("export \(.[0])='"'"'\(.[1])'"'"'")) | lines' ;;
-    env-nu) prog='[header] + (envpairs | map("$env.\(.[0]) = \"\(.[1] | gsub("\n"; "\\n"))\"")) | lines' ;;
+    env-sh) prog='[header] + (envpairs | map("export \(.[0])=\(.[1] | @sh)")) | lines' ;;
+    env-nu) prog='[header] + (envpairs | map("$env.\(.[0]) = \"\(.[1] | gsub("\\\\"; "\\\\") | gsub("\""; "\\\"") | gsub("\n"; "\\n"))\"")) | lines' ;;
     hosts) prog='.hosts | lines' ;;
     *) die "unknown target $1; expected one of: $(echo $TARGETS | sed 's/ /, /g')" ;;
   esac

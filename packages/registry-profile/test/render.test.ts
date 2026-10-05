@@ -93,3 +93,22 @@ describe("env renderers", () => {
     );
   });
 });
+
+describe("env quoting", () => {
+  const odd = resolve("odd", Profile.parse({ npm: "https://r.example/it's/\"q\"/b\\s/$(id)/", main: "https://r.example/m/", scope: "@a" }), {});
+  test("env-sh closes and reopens single quotes around a quote", () => {
+    expect(render(odd, "env-sh")).toContain(`export VLT_REGISTRY='https://r.example/it'\\''s/"q"/b\\s/$(id)/'`);
+  });
+  test("env-nu escapes backslash, double quote and newline", () => {
+    expect(render(odd, "env-nu")).toContain(`$env.VLT_REGISTRY = "https://r.example/it's/\\"q\\"/b\\\\s/$(id)/"`);
+    expect(render(odd, "env-nu")).toContain(`$env.VLT_REGISTRIES = "npm=https://r.example/it's/\\"q\\"/b\\\\s/$(id)/\\nmain=https://r.example/m/"`);
+  });
+});
+
+describe("JSON Schema", () => {
+  test("states that scope and main come together, like Profile.parse", async () => {
+    const z = await import("zod");
+    const schema = z.toJSONSchema(ProfilesDoc, { target: "draft-2020-12", io: "input" }) as { properties: { profiles: { additionalProperties: Record<string, unknown> } } };
+    expect(schema.properties.profiles.additionalProperties.dependentRequired).toEqual({ scope: ["main"], main: ["scope"] });
+  });
+});

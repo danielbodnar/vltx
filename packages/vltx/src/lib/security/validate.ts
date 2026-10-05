@@ -93,7 +93,8 @@ const lockRows = (root: string, env: Env): Row[] => {
   }
   // vlt 1.3.6 rewrites vlt-lock.json even when nothing changed; keep the bytes (and mtime-sensitive tools) stable.
   const before = readFileSync(lock);
-  const r = capture(["vlt", "install", "--frozen-lockfile", "--lockfile-only"], { cwd: root });
+  // scripts denied explicitly: a project vlt.json is untrusted input and can set allow-scripts
+  const r = capture(["vlt", "install", "--frozen-lockfile", "--lockfile-only", "--allow-scripts=:not(*)"], { cwd: root });
   const after = existsSync(lock) ? readFileSync(lock) : undefined;
   if (after === undefined || !before.equals(after)) writeFileSync(lock, before);
   if (r.code === 0) return [{ check: "vlt-lock.json", status: "ok", detail: "in sync with package.json (vlt install --frozen-lockfile --lockfile-only)" }];

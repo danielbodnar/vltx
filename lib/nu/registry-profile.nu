@@ -133,11 +133,11 @@ export def env-pairs [r: record]: nothing -> list {
 }
 
 def env-sh [r: record]: nothing -> string {
-  lines ([(header $r)] | append (env-pairs $r | each {|kv| $"export ($kv.0)='($kv.1)'" }))
+  lines ([(header $r)] | append (env-pairs $r | each {|kv| $"export ($kv.0)='($kv.1 | str replace --all "'" "'\\''")'" }))
 }
 
 def env-nu [r: record]: nothing -> string {
-  lines ([(header $r)] | append (env-pairs $r | each {|kv| $"$env.($kv.0) = \"($kv.1 | str replace --all "\n" '\n')\"" }))
+  lines ([(header $r)] | append (env-pairs $r | each {|kv| $"$env.($kv.0) = \"($kv.1 | str replace --all '\' '\\' | str replace --all '"' '\"' | str replace --all "\n" '\n')\"" }))
 }
 
 # Render one target for a profile (defaults: $VLT_LAB_PROFILE, then the document default).

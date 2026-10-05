@@ -30,6 +30,8 @@ const cmd: Command = {
     }
     const [dirArg, ...extra] = local.positionals;
     if (!dirArg || extra.length > 0) return ctx.warn(`usage: ${cmd.usage}`), 2;
+    // the migration rejects these too, but only after the directory and vlt init exist
+    if (local.unknown.length > 0) return ctx.warn(`unexpected argument(s): ${local.unknown.join(" ")}`), 2;
     const dir = resolve(ctx.flags.cwd, dirArg);
     if (existsSync(dir) && readdirSync(dir).length > 0) {
       ctx.warn(`${dir} exists and is not empty; vltx new only creates fresh projects (use vltx init inside it)`);

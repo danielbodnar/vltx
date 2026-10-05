@@ -45,12 +45,16 @@ const help = (): string =>
 const VLT_DRY_RUN = new Set(["pack", "publish"]);
 
 /**
- * `vlt install <pkgs>` with every lifecycle script denied (unless the user chose --allow-scripts),
- * then the :malware gate. Shared by `-i/--install` and `vltx install <pkg>`.
+ * `vlt install <pkgs>` with every lifecycle script denied, then the :malware gate. Shared by
+ * `-i/--install` and `vltx install <pkg>`. --allow-scripts is refused: scripts would run before the
+ * gate has seen the packages; `vltx vlt install` is the explicit way to get plain vlt behaviour.
  */
 const installWithGate = async (ctx: Ctx, args: readonly string[]): Promise<number> => {
-  const chosen = args.some((a) => a === "--allow-scripts" || a.startsWith("--allow-scripts="));
-  const code = await passthrough(["vlt", "install", ...args, ...(chosen ? [] : ["--allow-scripts=:not(*)"])], { cwd: ctx.flags.cwd });
+  if (args.some((a) => a === "--allow-scripts" || a.startsWith("--allow-scripts="))) {
+    ctx.warn("--allow-scripts: vltx installs always deny scripts before the malware gate runs; use `vltx vlt install ... --allow-scripts=...` to run vlt directly");
+    return 2;
+  }
+  const code = await passthrough(["vlt", "install", ...args, "--allow-scripts=:not(*)"], { cwd: ctx.flags.cwd });
   if (code !== 0) return code;
   const g = vltQuery(":malware", { cwd: ctx.flags.cwd });
   if (!g.ok) return ctx.warn(`gate could not run: ${g.error}`), 1;
@@ -104,7 +108,7 @@ const main = async (argv: string[]): Promise<number> => {
   // bare install/uninstall are vltx flows; with package arguments they belong to vlt
   if (PKG_ARG_PASSTHROUGH.has(command) && rest.some((a) => !a.startsWith("-"))) {
     if (flags.dryRun) return refuseDryRun(ctx, `\`${command}\` with package arguments`, command);
-    // like -i: scripts denied (unless --allow-scripts was given), then the malware gate
+    // like -i: scripts denied (--allow-scripts refused), then the malware gate
     if (command === "install") return installWithGate(ctx, rest);
     return toVlt(raw, flags.cwd);
   }

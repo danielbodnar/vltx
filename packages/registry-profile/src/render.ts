@@ -136,11 +136,18 @@ export const envPairs = (r: Resolved): Array<[string, string]> => [
     : []),
 ];
 
+/** POSIX single quotes: `'` becomes `'\''` (the same output as jq's `@sh`). */
+const shQuote = (v: string): string => `'${v.replaceAll("'", "'\\''")}'`;
+
+/** Nushell double quotes: escape backslash, quote and newline; plain "..." never interpolates. */
+const nuQuote = (v: string): string =>
+  `"${v.replaceAll("\\", "\\\\").replaceAll('"', '\\"').replaceAll("\n", "\\n")}"`;
+
 const envSh = (r: Resolved): string =>
-  lines([header(r), ...envPairs(r).map(([k, v]) => `export ${k}='${v}'`)]);
+  lines([header(r), ...envPairs(r).map(([k, v]) => `export ${k}=${shQuote(v)}`)]);
 
 const envNu = (r: Resolved): string =>
-  lines([header(r), ...envPairs(r).map(([k, v]) => `$env.${k} = "${v.replaceAll("\n", "\\n")}"`)]);
+  lines([header(r), ...envPairs(r).map(([k, v]) => `$env.${k} = ${nuQuote(v)}`)]);
 
 const hosts = (r: Resolved): string => lines([...r.hosts]);
 

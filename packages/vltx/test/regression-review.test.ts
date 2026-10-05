@@ -8,7 +8,7 @@ import { join } from "node:path";
 import { parseArgs } from "../src/args.ts";
 import { here } from "../src/lib/migrate/context.ts";
 import { target, vltEnv } from "../src/lib/migrate/target.ts";
-import { download } from "../src/lib/security/download.ts";
+import { curlArgs, download } from "../src/lib/security/download.ts";
 import { parseGate } from "../src/lib/security/gate.ts";
 import { registryHosts } from "../src/lib/security/sandbox.ts";
 import { backupPathFor, changeSet, newState, readState, sha256 } from "../src/lib/state.ts";
@@ -615,4 +615,67 @@ describe("finding 12: the sandbox run phase strips secrets", () => {
     },
     LONG,
   );
+});
+
+// ------------------------------------------------------------------------------------------ PR #1
+describe("PR #1 review: guarded installs, new, validate and the curl fallback", () => {
+  test(
+    "vltx install <pkg> --allow-scripts is refused before vlt runs; nothing changes and no script runs",
+    async () => {
+      const root = dir("pr1-allow");
+      const ran = scriptDep(root);
+      writeFileSync(join(root, "package.json"), JSON.stringify({ name: "pr1a", version: "1.0.0" }));
+      writeFileSync(join(root, "vlt.json"), JSON.stringify({ config: { registries: { npm: "https://registry.npmjs.org/" } } }));
+      const before = hashTree(root);
+      for (const flag of ["--allow-scripts=*", "--allow-scripts"]) {
+        const r = await vltx(["install", "file:./vendor/scripty", flag], { cwd: root, env });
+        expect(r.code).toBe(2);
+        expect(r.stderr).toContain("vltx vlt install");
+      }
+      expect(existsSync(ran)).toBe(false);
+      expect(hashTree(root)).toEqual(before);
+    },
+    LONG,
+  );
+
+  test(
+    "vltx new <dir> with an unknown option exits 2 before creating the directory",
+    async () => {
+      const parent = dir("pr1-new");
+      const r = await vltx(["new", "app", "--bogus", "--account", ACCOUNT], { cwd: parent, env });
+      expect(r.code).toBe(2);
+      expect(r.stderr).toContain("unexpected argument(s): --bogus");
+      expect(existsSync(join(parent, "app"))).toBe(false);
+    },
+    LONG,
+  );
+
+  test(
+    "validate checks the lockfile with scripts denied, whatever vlt.json allows",
+    async () => {
+      const root = dir("pr1-validate");
+      const bin = dir("pr1-validate-bin");
+      const log = join(sb.dir, "pr1-vlt-argv.log");
+      writeFileSync(join(bin, "vlt"), `#!/bin/sh\nprintf '%s\\n' "$*" >> '${log}'\n`);
+      chmodSync(join(bin, "vlt"), 0o755);
+      writeFileSync(join(root, "package.json"), JSON.stringify({ name: "pr1v", version: "1.0.0" }));
+      writeFileSync(join(root, "vlt.json"), JSON.stringify({ config: { "allow-scripts": "*", registries: { npm: "https://registry.npmjs.org/" } } }));
+      writeFileSync(join(root, "vlt-lock.json"), JSON.stringify({ lockfileVersion: 0, options: {}, nodes: {}, edges: {} }));
+      await vltx(["validate"], { cwd: root, env: { ...env, PATH: `${bin}:${env.PATH}` } });
+      const calls = readFileSync(log, "utf8").split("\n").filter((l) => l.startsWith("install "));
+      expect(calls).toEqual(["install --frozen-lockfile --lockfile-only --allow-scripts=:not(*)"]);
+    },
+    LONG,
+  );
+
+  test("curl follows redirects unless the headers carry credentials", () => {
+    const u = new URL("https://registry.example/pkg");
+    expect(curlArgs(u, 1, "/d")).toContain("-L");
+    const plain = curlArgs(u, 1, "/d", "/h", false);
+    expect(plain).toContain("-L");
+    expect(plain).toContain("@/h");
+    const secret = curlArgs(u, 1, "/d", "/h");
+    expect(secret).not.toContain("-L");
+    expect(secret).toContain("@/h");
+  });
 });
